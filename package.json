@@ -19,6 +19,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "vite build && node scripts/build-ruby.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
