@@ -1,0 +1,57 @@
+import { test, expect } from "@playwright/test";
+import fs from "fs/promises";
+import path from "path";
+
+const integration_test_files = [
+  "ruby-head-wasm-wasi.html"
+];
+
+for (const integration_test_file of integration_test_files) {
+  test(`Ruby WASM VDOM Browser Integration Test with ${integration_test_file}`, async ({ page }) => {
+    // Forward browser logs to console
+    page.on("console", msg => console.log(`[Browser Console] ${msg.type()}: ${msg.text()}`));
+    page.on("pageerror", err => console.error(`[Browser Error] ${err.message}`));
+
+    // Open the clean HTML page via local dev server
+    await page.goto(`/test/integration/${integration_test_file}`);
+
+    // Wait until the browser-ready script initializes and exposes the rubyVM promise
+    await page.waitForFunction(() => window.rubyVM !== undefined);
+
+    // Read the compiled production bundle directly from disk and inject it
+    const bundlePath = path.resolve("dist/rb-wasm-vdom.rb");
+    const productionCode = await fs.readFile(bundlePath, "utf8");
+
+    await page.evaluate(async (rubyCode) => {
+      const rubyModule = await window.rubyVM;
+      const vm = rubyModule.vm || rubyModule;
+      vm.eval(rubyCode);
+    }, productionCode);
+
+    // Read the separated browser test runner Ruby file and execute it
+    const runnerPath = path.resolve("test/integration/browser_test_runner.rb");
+    const testSuiteCode = await fs.readFile(runnerPath, "utf8");
+
+    await page.evaluate(async (rubyCode) => {
+      const rubyModule = await window.rubyVM;
+      const vm = rubyModule.vm || rubyModule;
+      vm.eval(rubyCode);
+    }, testSuiteCode);
+
+    // Assert the test result container updated by Ruby
+    const testResultsEl = page.locator("#test-results");
+    await expect(testResultsEl).toHaveAttribute("data-status", /success|failure/, { timeout: 15000 });
+
+    const status = await testResultsEl.getAttribute("data-status");
+    const rawResults = await testResultsEl.textContent();
+    const results = JSON.parse(rawResults);
+
+    console.log(`📊 Browser Test Summary: Passed: ${results.passed}, Errors: ${results.failed.length}`);
+
+    if (status === "failure") {
+      console.error("❌ Integration Test Failures:\n", results.failed.join("\n"));
+    }
+
+    expect(status).toBe("success");
+  });
+}

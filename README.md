@@ -9,3 +9,10 @@ At first, install [wasmtime](https://docs.wasmtime.dev/cli-install.html)
 ```bash
 npm run test:unit
 ```
+
+### Run integration test
+```bash
+npx playwright install
+npm run build
+npm run test:integration
+```

@@ -20,7 +20,8 @@
   "main": "index.js",
   "scripts": {
     "build": "vite build && node scripts/build-ruby.js",
-    "test": "npm run test:unit",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:integration": "playwright test test/integration/app.spec.js",
     "test:unit": "npm run test:unit:ruby-wasm-head",
     "test:unit:ruby-wasm-head": "node scripts/run-unit-tests.js ruby-wasm-head"
   },
