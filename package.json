@@ -25,6 +25,7 @@
     "test:unit:ruby-wasm-head": "node scripts/run-unit-tests.js ruby-wasm-head"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@ruby/head-wasm-wasi": "^2.9.3-2.9.4",
     "vite": "^8.0.16"
   }
