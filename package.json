@@ -1,0 +1,28 @@
+{
+  "name": "rb-wasm-vdom",
+  "version": "0.1.0",
+  "description": "A reactive Virtual DOM library for ruby.wasm and picoruby.wasm",
+  "keywords": [
+    "ruby.wasm",
+    "picoruby.wasm"
+  ],
+  "homepage": "https://github.com/sue445/rb-wasm-vdom#readme",
+  "bugs": {
+    "url": "https://github.com/sue445/rb-wasm-vdom/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sue445/rb-wasm-vdom.git"
+  },
+  "license": "MIT",
+  "author": "sue445",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "vite build && node scripts/build-ruby.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "vite": "^8.0.16"
+  }
+}
