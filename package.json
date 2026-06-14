@@ -20,8 +20,9 @@
   "main": "index.js",
   "scripts": {
     "build": "vite build && node scripts/build-ruby.js",
-    "test": "npm run test:ruby-wasm-head",
-    "test:ruby-wasm-head": "node scripts/run-tests.js ruby-wasm-head"
+    "test": "npm run test:unit",
+    "test:unit": "npm run test:unit:ruby-wasm-head",
+    "test:unit:ruby-wasm-head": "node scripts/run-unit-tests.js ruby-wasm-head"
   },
   "devDependencies": {
     "@ruby/head-wasm-wasi": "^2.9.3-2.9.4",

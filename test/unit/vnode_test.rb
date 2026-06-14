@@ -1,4 +1,4 @@
-require_relative "../src/rb_wasm_vdom/vnode"
+require_relative "../../src/rb_wasm_vdom/vnode"
 
 class TestVNode < SimpleTestCase
   # Test the initialization of a simple VNode without children or props

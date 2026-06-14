@@ -30,7 +30,7 @@ end
 
 # Automatically find and require all *_test.rb files in the test directory
 # Exclude subdirectories by searching directly inside "./test"
-Dir.glob("./test/*_test.rb").each do |file|
+Dir.glob("./test/unit/*_test.rb").each do |file|
   require file
 end
 
