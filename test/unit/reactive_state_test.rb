@@ -1,4 +1,4 @@
-require_relative "../src/rb_wasm_vdom/reactive_state"
+require_relative "../../src/rb_wasm_vdom/reactive_state"
 
 class ReactiveStateTest < SimpleTestCase
   # Test that the initial state can be read correctly

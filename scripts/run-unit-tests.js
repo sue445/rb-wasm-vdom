@@ -1,4 +1,4 @@
-// scripts/run-tests.js
+// scripts/run-unit-tests.js
 import fs from "fs/promises";
 import { WASI } from "wasi";
 
@@ -63,7 +63,7 @@ async function main() {
 
   // Execute the custom test runner script
   vm.eval(`
-    require "./test/run.rb"
+    require "./test/unit/run.rb"
   `);
 }
 
