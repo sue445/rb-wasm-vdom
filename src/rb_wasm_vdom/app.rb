@@ -1,6 +1,13 @@
+# rbs_inline: enabled
+
 module RbWasmVdom
   # Framework Core
   class App
+    # @rbs selector: String
+    # @rbs template: String
+    # @rbs state: Hash[Symbol, untyped]
+    # @rbs methods: Hash[Symbol, Proc]
+    # @rbs return: void
     def initialize(selector, template:, state:, methods:)
       @el = JS.global[:document].querySelector(selector)
       @template_ast = TemplateParser.parse(template)
@@ -16,6 +23,7 @@ module RbWasmVdom
 
     private
 
+    # @rbs return: void
     def render_cycle
       new_vnode = build_vdom(@template_ast)
 
@@ -29,10 +37,14 @@ module RbWasmVdom
       @current_vnode = new_vnode
     end
 
+    # @rbs text: VNode | String
+    # @rbs return: String
     def interpolate(text)
       text.to_s.gsub(/\{\{\s*(\w+)\s*\}\}/) { @state[$1.to_sym].to_s }
     end
 
+    # @rbs ast_node: VNode | String
+    # @rbs return: VNode | String
     def build_vdom(ast_node)
       return interpolate(ast_node) if ast_node.is_a?(String)
 
@@ -45,6 +57,8 @@ module RbWasmVdom
       VNode.new(ast_node.tag, new_props, new_children)
     end
 
+    # @rbs vnode: VNode | String
+    # @rbs return: untyped
     def create_element(vnode)
       document = JS.global[:document]
       return document.createTextNode(vnode) if vnode.is_a?(String)
@@ -58,6 +72,10 @@ module RbWasmVdom
       el
     end
 
+    # @rbs el: untyped
+    # @rbs old_props: Hash[String, String]
+    # @rbs new_props: Hash[String, String]
+    # @rbs return: void
     def update_props(el, old_props, new_props)
       old_props.each_key do |k|
         el.removeAttribute(k) unless new_props.key?(k) || k.start_with?("@")
@@ -81,6 +99,11 @@ module RbWasmVdom
       end
     end
 
+    # @rbs parent_el: untyped
+    # @rbs old_vnode: VNode | String | nil
+    # @rbs new_vnode: VNode | String | nil
+    # @rbs index: Integer
+    # @rbs return: void
     def patch(parent_el, old_vnode, new_vnode, index)
       current_el = parent_el[:childNodes].item(index)
 
@@ -115,6 +138,9 @@ module RbWasmVdom
       end
     end
 
+    # @rbs node1: VNode | String
+    # @rbs node2: VNode | String
+    # @rbs return: bool
     def changed?(node1, node2)
       return true if node1.class != node2.class
       return node1 != node2 if node1.is_a?(String)
