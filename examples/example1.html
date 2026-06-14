@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rb-wasm-vdom Example</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@ruby/head-wasm-wasi/dist/browser.script.iife.min.js"></script>
+
+  <script type="text/ruby" src="../dist/rb-wasm-vdom.rb"></script>
+
+  <style>
+      body { font-family: sans-serif; padding: 2rem; color: #333; }
+      .app-container { border: 2px solid #cc342d; padding: 20px; border-radius: 8px; max-width: 400px; background: #fffafaa0; }
+      .btn { padding: 8px 16px; margin-right: 8px; cursor: pointer; background: #cc342d; color: white; border: none; border-radius: 4px; font-weight: bold; }
+      .btn:hover { background: #a82721; }
+      .input-box { padding: 8px; width: 80px; border: 1px solid #ccc; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<h1>rb-wasm-vdom Example</h1>
+
+<div id="app">Loading Ruby VM...</div>
+
+<script type="text/ruby">
+  # Define the template with variable interpolation and event bindings
+  template = <<~HTML
+    <div class="app-container">
+      <h2 style="margin-top: 0; color: #cc342d;">{{ title }}</h2>
+
+      <div style="margin-bottom: 15px;">
+        <label>Step value: </label>
+        <input type="number" class="input-box" value="{{ step }}" @input="update_step">
+      </div>
+
+      <p style="font-size: 1.2rem;">Current Count: <strong>{{ count }}</strong></p>
+
+      <button class="btn" @click="increment">+ Increment</button>
+      <button class="btn" @click="decrement">- Decrement</button>
+      <button class="btn" style="background: #666;" @click="reset">Reset</button>
+    </div>
+  HTML
+
+  # Define the reactive state
+  state = {
+    title: "Ruby Reactivity App",
+    count: 0,
+    step: 1
+  }
+
+  # Define the methods to handle events and mutate the state
+  methods = {
+    increment:   ->(e, s) { s[:count] += s[:step] },
+    decrement:   ->(e, s) { s[:count] -= s[:step] },
+    reset:       ->(e, s) { s[:count] = 0 },
+    update_step: ->(e, s) { s[:step] = e[:target][:value].to_i }
+  }
+
+  # Initialize and mount the application
+  RbWasmVdom.create_app("#app", template: template, state: state, methods: methods)
+</script>
+
+</body>
+</html>
