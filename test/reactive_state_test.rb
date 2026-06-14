@@ -1,7 +1,6 @@
-require "minitest/autorun"
 require_relative "../src/rb_wasm_vdom/reactive_state"
 
-class ReactiveStateTest < Minitest::Test
+class ReactiveStateTest < SimpleTestCase
   # Test that the initial state can be read correctly
   def test_read_state
     state = RbWasmVdom::ReactiveState.new({ count: 0, title: "Test" }) {}
@@ -35,6 +34,6 @@ class ReactiveStateTest < Minitest::Test
     state[:count] = 0
 
     assert_equal 0, state[:count]
-    refute callback_triggered
+    assert_equal false, callback_triggered
   end
 end

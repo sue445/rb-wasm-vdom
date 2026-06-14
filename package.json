@@ -20,7 +20,8 @@
   "main": "index.js",
   "scripts": {
     "build": "vite build && node scripts/build-ruby.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:ruby-wasm-head",
+    "test:ruby-wasm-head": "node scripts/run-tests.js ruby-wasm-head"
   },
   "devDependencies": {
     "@ruby/head-wasm-wasi": "^2.9.3-2.9.4",

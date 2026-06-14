@@ -1,7 +1,6 @@
-require "minitest/autorun"
 require_relative "../src/rb_wasm_vdom/vnode"
 
-class TestVNode < Minitest::Test
+class TestVNode < SimpleTestCase
   # Test the initialization of a simple VNode without children or props
   def test_initialize_basic
     vnode = RbWasmVdom::VNode.new("div")
