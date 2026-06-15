@@ -1,6 +1,14 @@
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2
+  Exclude:
+    - 'dist/**/*'
+
+    # ref. https://github.com/rubocop/rubocop/blob/v1.87.0/config/default.yml#L56-L60
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
 
 Layout/LeadingCommentSpace:
   AllowRBSInlineAnnotation: true
