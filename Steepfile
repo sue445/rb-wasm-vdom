@@ -21,6 +21,11 @@
 #   # end
 # end
 
+target :lib do
+  signature "sig"
+  check "src"
+end
+
 # target :test do
 #   unreferenced!                     # Skip type checking the `lib` code when types in `test` target is changed
 #   signature "sig/test"              # Put RBS files for tests under `sig/test`
