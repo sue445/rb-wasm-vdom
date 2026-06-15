@@ -64,4 +64,4 @@ puts "  Passed: #{success_count}"
 puts "  Failed: #{failure_count}"
 
 # Exit with non-zero code if any test failed
-exit(1) if failure_count > 0
+exit(1) if failure_count.positive?
