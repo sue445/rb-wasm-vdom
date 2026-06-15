@@ -147,6 +147,7 @@ module RbWasmVdom
     def changed?(node1, node2)
       return true if node1.class != node2.class
       return node1 != node2 if node1.is_a?(String)
+
       node1.tag != node2.tag
     end
   end
