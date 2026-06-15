@@ -8,19 +8,19 @@ class BrowserIntegrationTest
       begin
         test_initialize_and_initial_render
         results[:passed] += 1
-      rescue => e
+      rescue StandardError => e
         results[:failed] << "test_initialize_and_initial_render: #{e.message}"
       end
 
       begin
         test_state_update_re_renders_dom
         results[:passed] += 1
-      rescue => e
+      rescue StandardError => e
         results[:failed] << "test_state_update_re_renders_dom: #{e.message}"
       end
 
       write_results(results)
-    rescue => e
+    rescue StandardError => e
       write_results({
                       passed: results[:passed],
                       failed: ["run_all_tests: #{e.message}"]

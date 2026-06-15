@@ -50,7 +50,7 @@ SimpleTestCase.subclasses.each do |test_class|
       instance.send(method)
       print "."
       success_count += 1
-    rescue => e
+    rescue StandardError => e
       puts "\n❌ #{test_class}##{method} failed:"
       puts "  #{e.message}"
       failure_count += 1
