@@ -83,20 +83,21 @@ class BrowserIntegrationTest
     escaped = ""
 
     value.to_s.each_char do |char|
-      escaped << case char
-                 when "\\"
-                   "\\\\"
-                 when '"'
-                   "\\\""
-                 when "\n"
-                   "\\n"
-                 when "\r"
-                   "\\r"
-                 when "\t"
-                   "\\t"
-                 else
-                   char
-                 end
+      escaped <<
+        case char
+        when "\\"
+          "\\\\"
+        when '"'
+          "\\\""
+        when "\n"
+          "\\n"
+        when "\r"
+          "\\r"
+        when "\t"
+          "\\t"
+        else
+          char
+        end
     end
 
     "\"#{escaped}\""
