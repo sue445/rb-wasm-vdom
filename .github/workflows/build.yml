@@ -55,9 +55,6 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Generate dist/
-        run: npm run build
-
       - name: Run integration tests
         run: npm run test:integration
 

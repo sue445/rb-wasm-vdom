@@ -13,6 +13,5 @@ npm run test:unit
 ### Run integration test
 ```bash
 npx playwright install
-npm run build
 npm run test:integration
 ```
