@@ -1,4 +1,7 @@
 # rb-wasm-vdom
+A reactive Virtual DOM library for [ruby.wasm](https://github.com/ruby/ruby.wasm) and [Picoruby.wasm](https://www.npmjs.com/package/@picoruby/wasm-wasi)
+
+[![build](https://github.com/sue445/rb-wasm-vdom/actions/workflows/build.yml/badge.svg)](https://github.com/sue445/rb-wasm-vdom/actions/workflows/build.yml)
 
 ## Development
 ### Run unit test
