@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../../src/rb_wasm_vdom/vnode"
 
 class TestVNode < SimpleTestCase

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require_relative "../../src/rb_wasm_vdom/reactive_state"
 
 class ReactiveStateTest < SimpleTestCase
   # Test that the initial state can be read correctly
   def test_read_state
-    state = RbWasmVdom::ReactiveState.new({ count: 0, title: "Test" }) {}
+    state = RbWasmVdom::ReactiveState.new({ count: 0, title: "Test" }) {} # rubocop:disable Lint/EmptyBlock
 
     assert_equal 0, state[:count]
     assert_equal "Test", state[:title]

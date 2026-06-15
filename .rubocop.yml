@@ -1,0 +1,27 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  SuggestExtensions: false
+  Exclude:
+    - 'dist/**/*'
+
+    # ref. https://github.com/rubocop/rubocop/blob/v1.87.0/config/default.yml#L56-L60
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
+
+Layout/LeadingCommentSpace:
+  AllowRBSInlineAnnotation: true
+
+Naming/MethodParameterName:
+  AllowedNames:
+    - el
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes

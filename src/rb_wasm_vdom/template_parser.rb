@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rbs_inline: enabled
 
 module RbWasmVdom
@@ -40,6 +41,7 @@ module RbWasmVdom
       setup_js_parser unless @setup_done
       json_str = JS.global.__RbWasmVdom_parseHTMLToJSON(html_string).to_s
       return nil if json_str == "null" || json_str.empty?
+
       build_ast(JSON.parse(json_str))
     end
 
@@ -47,6 +49,7 @@ module RbWasmVdom
     # @rbs return: VNode | String
     def self.build_ast(data)
       return data if data.is_a?(String)
+
       children = data["children"].map { |child| build_ast(child) }
       VNode.new(data["tag"], data["props"], children)
     end

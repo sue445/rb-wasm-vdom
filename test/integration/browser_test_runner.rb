@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "js"
 
 class BrowserIntegrationTest
@@ -8,19 +10,19 @@ class BrowserIntegrationTest
       begin
         test_initialize_and_initial_render
         results[:passed] += 1
-      rescue => e
+      rescue StandardError => e
         results[:failed] << "test_initialize_and_initial_render: #{e.message}"
       end
 
       begin
         test_state_update_re_renders_dom
         results[:passed] += 1
-      rescue => e
+      rescue StandardError => e
         results[:failed] << "test_state_update_re_renders_dom: #{e.message}"
       end
 
       write_results(results)
-    rescue => e
+    rescue StandardError => e
       write_results({
                       passed: results[:passed],
                       failed: ["run_all_tests: #{e.message}"]
@@ -36,7 +38,7 @@ class BrowserIntegrationTest
 
   def test_initialize_and_initial_render
     setup_root_element
-    app = RbWasmVdom::App.new(
+    RbWasmVdom::App.new(
       "#root",
       template: '<div id="test-message">Count: {{ count }}</div>',
       state: { count: 10 },
@@ -81,20 +83,21 @@ class BrowserIntegrationTest
     escaped = ""
 
     value.to_s.each_char do |char|
-      case char
-      when "\\"
-        escaped << "\\\\"
-      when '"'
-        escaped << "\\\""
-      when "\n"
-        escaped << "\\n"
-      when "\r"
-        escaped << "\\r"
-      when "\t"
-        escaped << "\\t"
-      else
-        escaped << char
-      end
+      escaped <<
+        case char
+        when "\\"
+          "\\\\"
+        when '"'
+          "\\\""
+        when "\n"
+          "\\n"
+        when "\r"
+          "\\r"
+        when "\t"
+          "\\t"
+        else
+          char
+        end
     end
 
     "\"#{escaped}\""

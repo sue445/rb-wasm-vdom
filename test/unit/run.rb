@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 # Simple custom assertion helpers compatible with both ruby.wasm and picoruby.wasm
 module MiniTestMock
   def assert(condition, message = "Assertion failed")
-    unless condition
-      raise "Failure: #{message}"
-    end
+    return if condition
+
+    raise "Failure: #{message}"
   end
 
   def assert_equal(expected, actual, message = nil)
-    unless expected == actual
-      msg = message || "Expected #{expected.inspect}, but got #{actual.inspect}"
-      raise "Failure: #{msg}"
-    end
+    return if expected == actual
+
+    msg = message || "Expected #{expected.inspect}, but got #{actual.inspect}"
+    raise "Failure: #{msg}"
   end
 end
 
@@ -19,6 +21,7 @@ class SimpleTestCase
   include MiniTestMock
 
   def self.inherited(subclass)
+    super
     @subclasses ||= []
     @subclasses << subclass
   end
@@ -50,7 +53,7 @@ SimpleTestCase.subclasses.each do |test_class|
       instance.send(method)
       print "."
       success_count += 1
-    rescue => e
+    rescue StandardError => e
       puts "\n❌ #{test_class}##{method} failed:"
       puts "  #{e.message}"
       failure_count += 1
@@ -63,4 +66,4 @@ puts "  Passed: #{success_count}"
 puts "  Failed: #{failure_count}"
 
 # Exit with non-zero code if any test failed
-exit(1) if failure_count > 0
+exit(1) if failure_count.positive?

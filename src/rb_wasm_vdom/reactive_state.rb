@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rbs_inline: enabled
 
 module RbWasmVdom
@@ -22,6 +23,7 @@ module RbWasmVdom
     # @rbs return: void
     def []=(key, value)
       return if @data[key] == value
+
       @data[key] = value
       @on_change.call
     end
