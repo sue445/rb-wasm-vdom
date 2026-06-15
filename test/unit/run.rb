@@ -21,6 +21,7 @@ class SimpleTestCase
   include MiniTestMock
 
   def self.inherited(subclass)
+    super
     @subclasses ||= []
     @subclasses << subclass
   end
