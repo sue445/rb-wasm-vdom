@@ -16,6 +16,10 @@ AllCops:
 Layout/LeadingCommentSpace:
   AllowRBSInlineAnnotation: true
 
+Naming/MethodParameterName:
+  AllowedNames:
+    - el
+
 Style/Documentation:
   Enabled: false
 
