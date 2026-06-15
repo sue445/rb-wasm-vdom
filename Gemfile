@@ -2,4 +2,8 @@
 
 source "https://rubygems.org"
 
-# gem "rails"
+group :development do
+  gem "rake", require: false
+  gem "rubocop", require: false
+  gem "rubocop_auto_corrector", require: false
+end
