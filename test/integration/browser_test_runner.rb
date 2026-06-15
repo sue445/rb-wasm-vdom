@@ -1,31 +1,31 @@
 require "js"
-require "json"
 
 class BrowserIntegrationTest
   def run_all_tests
     results = { passed: 0, failed: [] }
 
     begin
-      test_initialize_and_initial_render
-      results[:passed] += 1
+      begin
+        test_initialize_and_initial_render
+        results[:passed] += 1
+      rescue => e
+        results[:failed] << "test_initialize_and_initial_render: #{e.message}"
+      end
+
+      begin
+        test_state_update_re_renders_dom
+        results[:passed] += 1
+      rescue => e
+        results[:failed] << "test_state_update_re_renders_dom: #{e.message}"
+      end
+
+      write_results(results)
     rescue => e
-      results[:failed] << "test_initialize_and_initial_render: #{e.message}"
+      write_results({
+                      passed: results[:passed],
+                      failed: ["run_all_tests: #{e.message}"]
+                    })
     end
-
-    begin
-      test_state_update_re_renders_dom
-      results[:passed] += 1
-    rescue => e
-      results[:failed] << "test_state_update_re_renders_dom: #{e.message}"
-    end
-
-    # Output results back to the DOM for Playwright to read
-    document = JS.global[:document]
-    el = document.getElementById("test-results")
-
-    el[:innerHTML] = ""
-    el.setAttribute("data-status", results[:failed].empty? ? "success" : "failure")
-    el[:textContent] = results.to_json
   end
 
   def setup_root_element
@@ -61,7 +61,42 @@ class BrowserIntegrationTest
     counter = JS.global[:document].getElementById("counter")
     raise "Expected '5', got '#{counter[:textContent]}'" unless counter[:textContent].to_s == "5"
   end
-end
 
-# Instantly execute the test runner
-BrowserIntegrationTest.new.run_all_tests
+  private
+
+  def write_results(results)
+    document = JS.global[:document]
+    el = document.getElementById("test-results")
+
+    el[:textContent] = serialize_results(results)
+    el.setAttribute("data-status", results[:failed].empty? ? "success" : "failure")
+  end
+
+  def serialize_results(results)
+    failed_json = results[:failed].map { |message| json_escape(message) }.join(",")
+    "{\"passed\":#{results[:passed]},\"failed\":[#{failed_json}]}"
+  end
+
+  def json_escape(value)
+    escaped = ""
+
+    value.to_s.each_char do |char|
+      case char
+      when "\\"
+        escaped << "\\\\"
+      when '"'
+        escaped << "\\\""
+      when "\n"
+        escaped << "\\n"
+      when "\r"
+        escaped << "\\r"
+      when "\t"
+        escaped << "\\t"
+      else
+        escaped << char
+      end
+    end
+
+    "\"#{escaped}\""
+  end
+end
