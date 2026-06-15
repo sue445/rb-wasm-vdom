@@ -36,7 +36,7 @@ class BrowserIntegrationTest
 
   def test_initialize_and_initial_render
     setup_root_element
-    app = RbWasmVdom::App.new(
+    RbWasmVdom::App.new(
       "#root",
       template: '<div id="test-message">Count: {{ count }}</div>',
       state: { count: 10 },
