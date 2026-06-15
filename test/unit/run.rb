@@ -4,7 +4,6 @@ module MiniTestMock
     return if condition
 
     raise "Failure: #{message}"
-
   end
 
   def assert_equal(expected, actual, message = nil)
@@ -12,7 +11,6 @@ module MiniTestMock
 
     msg = message || "Expected #{expected.inspect}, but got #{actual.inspect}"
     raise "Failure: #{msg}"
-
   end
 end
 
