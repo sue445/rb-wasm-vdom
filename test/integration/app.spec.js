@@ -3,8 +3,28 @@ import fs from "fs/promises";
 import path from "path";
 
 const integration_test_files = [
+  "picoruby-wasm-wasi-latest.html",
   "ruby-head-wasm-wasi.html"
 ];
+
+async function assertBrowserTestResults(page) {
+  // Assert the test result container updated by Ruby
+  const testResultsEl = page.locator("#test-results");
+  await expect(testResultsEl).toHaveAttribute("data-status", /success|failure/, { timeout: 15000 });
+  await expect(testResultsEl).not.toHaveText("", { timeout: 15000 });
+
+  const status = await testResultsEl.getAttribute("data-status");
+  const rawResults = await testResultsEl.textContent();
+  const results = JSON.parse(rawResults);
+
+  console.log(`📊 Browser Test Summary: Passed: ${results.passed}, Errors: ${results.failed.length}`);
+
+  if (status === "failure") {
+    console.error("❌ Integration Test Failures:\n", results.failed.join("\n"));
+  }
+
+  expect(status).toBe("success");
+}
 
 for (const integration_test_file of integration_test_files) {
   test(`Ruby WASM VDOM Browser Integration Test with ${integration_test_file}`, async ({ page }) => {
@@ -14,6 +34,11 @@ for (const integration_test_file of integration_test_files) {
 
     // Open the clean HTML page via local dev server
     await page.goto(`/test/integration/${integration_test_file}`);
+
+    if (integration_test_file.includes("picoruby")) {
+      await assertBrowserTestResults(page);
+      return;
+    }
 
     // Wait until the browser-ready script initializes and exposes the rubyVM promise
     await page.waitForFunction(() => window.rubyVM !== undefined);
@@ -35,23 +60,9 @@ for (const integration_test_file of integration_test_files) {
     await page.evaluate(async (rubyCode) => {
       const rubyModule = await window.rubyVM;
       const vm = rubyModule.vm || rubyModule;
-      vm.eval(rubyCode);
+      vm.eval(`${rubyCode}\nBrowserIntegrationTest.new.run_all_tests`);
     }, testSuiteCode);
 
-    // Assert the test result container updated by Ruby
-    const testResultsEl = page.locator("#test-results");
-    await expect(testResultsEl).toHaveAttribute("data-status", /success|failure/, { timeout: 15000 });
-
-    const status = await testResultsEl.getAttribute("data-status");
-    const rawResults = await testResultsEl.textContent();
-    const results = JSON.parse(rawResults);
-
-    console.log(`📊 Browser Test Summary: Passed: ${results.passed}, Errors: ${results.failed.length}`);
-
-    if (status === "failure") {
-      console.error("❌ Integration Test Failures:\n", results.failed.join("\n"));
-    }
-
-    expect(status).toBe("success");
+    await assertBrowserTestResults(page);
   });
 }

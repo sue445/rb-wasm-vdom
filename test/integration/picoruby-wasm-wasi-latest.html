@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PicoRuby WASM VDOM Integration Tests</title>
+  <script src="https://cdn.jsdelivr.net/npm/@picoruby/wasm-wasi@latest/dist/init.iife.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<div id="test-results" style="display: none;">Running...</div>
+
+<script type="text/ruby" src="/dist/rb-wasm-vdom.rb"></script>
+<script type="text/ruby" src="/test/integration/browser_test_runner.rb"></script>
+<script type="text/ruby">
+  BrowserIntegrationTest.new.run_all_tests
+</script>
+</body>
+</html>

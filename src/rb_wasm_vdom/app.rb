@@ -40,7 +40,10 @@ module RbWasmVdom
     # @rbs text: VNode | String
     # @rbs return: String
     def interpolate(text)
-      text.to_s.gsub(/\{\{\s*(\w+)\s*\}\}/) { @state[$1.to_sym].to_s }
+      text.to_s.gsub(/\{\{\s*\w+\s*\}\}/) do |matched|
+        key = matched.match(/\w+/)[0].to_sym
+        @state[key].to_s
+      end
     end
 
     # @rbs ast_node: VNode | String
