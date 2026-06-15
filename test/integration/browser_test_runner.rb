@@ -92,7 +92,7 @@ class BrowserIntegrationTest
         "\\r"
                  when "\t"
         "\\t"
-      else
+                 else
         char
                  end
     end
