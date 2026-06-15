@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "../../src/rb_wasm_vdom/reactive_state"
 
 class ReactiveStateTest < SimpleTestCase

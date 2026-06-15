@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Simple custom assertion helpers compatible with both ruby.wasm and picoruby.wasm
 module MiniTestMock
   def assert(condition, message = "Assertion failed")
