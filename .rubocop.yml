@@ -16,5 +16,8 @@ AllCops:
 Layout/LeadingCommentSpace:
   AllowRBSInlineAnnotation: true
 
+Style/Documentation:
+  Enabled: false
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes

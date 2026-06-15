@@ -44,11 +44,3 @@ Metrics/PerceivedComplexity:
 Naming/MethodParameterName:
   Exclude:
     - 'src/rb_wasm_vdom/app.rb'
-
-# Offense count: 1
-# Configuration parameters: AllowedConstants.
-Style/Documentation:
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
-    - 'src/rb_wasm_vdom.rb'
