@@ -2,5 +2,8 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2
 
+Layout/LeadingCommentSpace:
+  AllowRBSInlineAnnotation: true
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
