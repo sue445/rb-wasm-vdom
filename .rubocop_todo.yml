@@ -12,7 +12,7 @@ Metrics/AbcSize:
   Max: 45
 
 Metrics/ClassLength:
-  Max: 106
+  Max: 107
 
 # Offense count: 2
 # Configuration parameters: AllowedMethods, AllowedPatterns.

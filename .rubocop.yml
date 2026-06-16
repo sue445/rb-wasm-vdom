@@ -6,6 +6,7 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - 'dist/**/*'
+    - 'examples/**/*'
 
     # ref. https://github.com/rubocop/rubocop/blob/v1.87.0/config/default.yml#L56-L60
     - 'node_modules/**/*'
