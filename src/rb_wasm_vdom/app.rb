@@ -55,20 +55,5 @@ module RbWasmVdom
       new_children = ast_node.children.map { |child| build_vdom(child) }
       VNode.new(ast_node.tag, new_props, new_children)
     end
-
-    # @rbs vnode: VNode | String
-    # @rbs return: untyped
-    def create_element(vnode)
-      document = JS.global[:document]
-      return document.createTextNode(vnode) if vnode.is_a?(String)
-
-      el = document.createElement(vnode.tag)
-      update_props(el, {}, vnode.props)
-
-      vnode.children.each do |child|
-        el.appendChild(create_element(child))
-      end
-      el
-    end
   end
 end
