@@ -17,7 +17,7 @@ module RbWasmVdom
       return remove_node(parent_el, current_el) if new_vnode.nil?
       return replace_node(parent_el, current_el, new_vnode) if changed?(old_vnode, new_vnode)
 
-      patch_element(current_el, old_vnode, new_vnode) if both_elements?(old_vnode, new_vnode)
+      patch_element(current_el, old_vnode, new_vnode) if old_vnode.is_a?(VNode) && new_vnode.is_a?(VNode)
     end
 
     private
@@ -62,13 +62,6 @@ module RbWasmVdom
     # @rbs return: void
     def replace_node(parent_el, current_el, new_vnode)
       parent_el.replaceChild(create_element(new_vnode), current_el)
-    end
-
-    # @rbs old_vnode: VNode | String
-    # @rbs new_vnode: VNode | String
-    # @rbs return: bool
-    def both_elements?(old_vnode, new_vnode)
-      old_vnode.is_a?(VNode) && new_vnode.is_a?(VNode)
     end
 
     # @rbs current_el: untyped
