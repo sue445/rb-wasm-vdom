@@ -10,6 +10,7 @@ const files = [
   'src/rb_wasm_vdom/vnode.rb',
   'src/rb_wasm_vdom/reactive_state.rb',
   'src/rb_wasm_vdom/template_parser.rb',
+  'src/rb_wasm_vdom/patcher.rb',
   'src/rb_wasm_vdom/app.rb',
   'src/rb_wasm_vdom.rb'
 ];
