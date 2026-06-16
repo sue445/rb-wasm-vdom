@@ -15,6 +15,10 @@ AllCops:
 Layout/LeadingCommentSpace:
   AllowRBSInlineAnnotation: true
 
+Metrics/MethodLength:
+  Exclude:
+    - 'test/**/*'
+
 Naming/MethodParameterName:
   AllowedNames:
     - el
