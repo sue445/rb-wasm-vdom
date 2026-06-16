@@ -79,19 +79,50 @@ module RbWasmVdom
       old_children = old_vnode.children
       new_children = new_vnode.children
 
-      if old_children.length > new_children.length
-        (old_children.length - 1).downto(new_children.length) do |i|
-          child_to_remove = current_el[:childNodes].item(i)
-          current_el.removeChild(child_to_remove) unless child_to_remove == JS::Null
-        end
-      end
+      patch_children(current_el, old_children, new_children)
+    end
 
-      [old_children.length, new_children.length].min.times do |i|
-        patch(current_el, old_children[i], new_children[i], i)
-      end
+    # @rbs current_el: untyped
+    # @rbs old_children: Array[VNode | String]
+    # @rbs new_children: Array[VNode | String]
+    # @rbs return: void
+    def patch_children(current_el, old_children, new_children)
+      remove_extra_children(current_el, old_children, new_children)
+      patch_common_children(current_el, old_children, new_children)
 
       return unless new_children.length > old_children.length
 
+      append_missing_children(current_el, old_children, new_children)
+    end
+
+    # @rbs current_el: untyped
+    # @rbs old_children: Array[VNode | String]
+    # @rbs new_children: Array[VNode | String]
+    # @rbs return: void
+    def remove_extra_children(current_el, old_children, new_children)
+      return unless old_children.length > new_children.length
+
+      (old_children.length - 1).downto(new_children.length) do |i|
+        child_to_remove = current_el[:childNodes].item(i)
+        current_el.removeChild(child_to_remove) unless child_to_remove == JS::Null
+      end
+    end
+
+    # @rbs current_el: untyped
+    # @rbs old_children: Array[VNode | String]
+    # @rbs new_children: Array[VNode | String]
+    # @rbs return: void
+    def patch_common_children(current_el, old_children, new_children)
+      [old_children.length, new_children.length].min.times do |i|
+        patch(current_el, old_children[i], new_children[i], i)
+      end
+    end
+
+    # @rbs current_el: untyped
+    # @rbs old_children: Array[VNode | String]
+    # @rbs new_children: Array[VNode | String]
+    # @rbs return: void
+    def append_missing_children(current_el, old_children, new_children)
       (old_children.length...new_children.length).each do |i|
         current_el.appendChild(create_element(new_children[i]))
       end
