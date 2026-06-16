@@ -89,9 +89,7 @@ module RbWasmVdom
     # @rbs return: void
     def update_props(el, old_props, new_props)
       old_props.each_key do |k|
-        next if new_props.key?(k) || k.start_with?("@")
-
-        remove_prop(el, k)
+        el.removeAttribute(k) unless new_props.key?(k) || k.start_with?("@")
       end
 
       new_props.each do |k, v|
@@ -101,53 +99,15 @@ module RbWasmVdom
           unless old_props.key?(k)
             event_name = k.sub(/^@/, "")
             handler = ->(e) { @methods[v.to_sym].call(e, @state) }
-            set_event_handler(el, event_name, handler)
+            el.addEventListener(event_name, handler)
           end
+        elsif k == "value"
+          el[:value] = v
+          el.setAttribute(k, v)
         else
-          set_prop(el, k, v)
+          el.setAttribute(k, v)
         end
       end
-    end
-
-    # @rbs el: untyped
-    # @rbs name: String
-    # @rbs value: String
-    # @rbs return: void
-    def set_prop(el, name, value)
-      case name
-      when "class"
-        el[:className] = value
-      when "style"
-        el[:style][:cssText] = value
-      when "value"
-        el[:value] = value
-      else
-        el[name.to_sym] = value
-      end
-    end
-
-    # @rbs el: untyped
-    # @rbs name: String
-    # @rbs return: void
-    def remove_prop(el, name)
-      case name
-      when "class"
-        el[:className] = ""
-      when "style"
-        el[:style][:cssText] = ""
-      when "value"
-        el[:value] = ""
-      else
-        el[name.to_sym] = ""
-      end
-    end
-
-    # @rbs el: untyped
-    # @rbs event_name: String
-    # @rbs handler: Proc
-    # @rbs return: void
-    def set_event_handler(el, event_name, handler)
-      el["on#{event_name}".to_sym] = handler
     end
 
     # @rbs parent_el: untyped
