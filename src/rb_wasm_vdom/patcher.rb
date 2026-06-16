@@ -133,25 +133,40 @@ module RbWasmVdom
     # @rbs new_props: Hash[String, String]
     # @rbs return: void
     def update_props(el, old_props, new_props)
-      old_props.each_key do |k|
-        el.removeAttribute(k) unless new_props.key?(k) || k.start_with?("@")
+      remove_old_props(el, old_props, new_props)
+      apply_new_props(el, old_props, new_props)
+    end
+
+    # @rbs el: untyped
+    # @rbs old_props: Hash[String, String]
+    # @rbs new_props: Hash[String, String]
+    # @rbs return: void
+    def remove_old_props(el, old_props, new_props)
+      old_props.each_key do |key|
+        el.removeAttribute(key) unless new_props.key?(key) || key.start_with?("@")
       end
+    end
 
-      new_props.each do |k, v|
-        next if old_props[k] == v
+    # @rbs el: untyped
+    # @rbs old_props: Hash[String, String]
+    # @rbs new_props: Hash[String, String]
+    # @rbs return: void
+    def apply_new_props(el, old_props, new_props)
+      new_props.each do |key, value|
+        next if old_props[key] == value
 
-        if k.start_with?("@")
-          unless old_props.key?(k)
-            event_name = k.sub(/^@/, "")
+        if key.start_with?("@")
+          unless old_props.key?(key)
+            event_name = key.sub(/^@/, "")
             el.addEventListener(event_name) do |e|
-              @methods[v.to_sym].call(e, @state)
+              @methods[value.to_sym].call(e, @state)
             end
           end
-        elsif k == "value"
-          el[:value] = v
-          el.setAttribute(k, v)
+        elsif key == "value"
+          el[:value] = value
+          el.setAttribute(key, value)
         else
-          el.setAttribute(k, v)
+          el.setAttribute(key, value)
         end
       end
     end
