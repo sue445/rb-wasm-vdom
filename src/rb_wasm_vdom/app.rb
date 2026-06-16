@@ -98,8 +98,9 @@ module RbWasmVdom
         if k.start_with?("@")
           unless old_props.key?(k)
             event_name = k.sub(/^@/, "")
-            handler = ->(e) { @methods[v.to_sym].call(e, @state) }
-            el.addEventListener(event_name, handler)
+            el.addEventListener(event_name) do |e|
+              @methods[v.to_sym].call(e, @state)
+            end
           end
         elsif k == "value"
           el[:value] = v
