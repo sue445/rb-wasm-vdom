@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2
@@ -16,6 +14,10 @@ AllCops:
 
 Layout/LeadingCommentSpace:
   AllowRBSInlineAnnotation: true
+
+Metrics/MethodLength:
+  Exclude:
+    - 'test/**/*'
 
 Naming/MethodParameterName:
   AllowedNames:

@@ -3,6 +3,9 @@
 import vnodeRb from "./rb_wasm_vdom/vnode.rb?raw";
 import reactiveStateRb from "./rb_wasm_vdom/reactive_state.rb?raw";
 import templateParserRb from "./rb_wasm_vdom/template_parser.rb?raw";
+import domRendererRb from "./rb_wasm_vdom/dom_renderer.rb?raw";
+import patcherRb from "./rb_wasm_vdom/patcher.rb?raw";
+import interpolatorRb from "./rb_wasm_vdom/interpolator.rb?raw";
 import appRb from "./rb_wasm_vdom/app.rb?raw";
 import mainRb from "./rb_wasm_vdom.rb?raw";
 
@@ -11,6 +14,9 @@ const frameworkRubyCode = [
   vnodeRb,
   reactiveStateRb,
   templateParserRb,
+  domRendererRb,
+  patcherRb,
+  interpolatorRb,
   appRb,
   mainRb
 ].join("\n\n");
