@@ -5,7 +5,7 @@ module RbWasmVdom
   # HTML Template Parser
   class TemplateParser
     # @rbs return: void
-    def self.setup_js_parser
+    def self.setup_js_parser # rubocop:disable Metrics/MethodLength
       # Add a prefix to the function name to prevent global namespace pollution in JS
       JS.eval(<<~JS)
         window.__RbWasmVdom_parseHTMLToJSON = function(html) {
