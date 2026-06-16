@@ -6,6 +6,8 @@ module JS
     def to_s: () -> String
     def to_i: () -> Integer
     def to_f: () -> Float
+
+    def __RbWasmVdom_parseHTMLToJSON: (String html) -> String
   end
 
   def self.eval: (String code) -> JS::Object
