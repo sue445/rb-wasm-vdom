@@ -155,20 +155,45 @@ module RbWasmVdom
       new_props.each do |key, value|
         next if old_props[key] == value
 
-        if key.start_with?("@")
-          unless old_props.key?(key)
-            event_name = key.sub(/^@/, "")
-            el.addEventListener(event_name) do |e|
-              @methods[value.to_sym].call(e, @state)
-            end
-          end
-        elsif key == "value"
-          el[:value] = value
-          el.setAttribute(key, value)
-        else
-          el.setAttribute(key, value)
-        end
+        apply_prop(el, old_props, key, value)
       end
+    end
+
+    # @rbs el: untyped
+    # @rbs old_props: Hash[String, String]
+    # @rbs key: String
+    # @rbs value: String
+    def apply_prop(el, old_props, key, value)
+      if key.start_with?("@")
+        add_event_listener(el, old_props, key, value)
+      elsif key == "value"
+        update_value_prop(el, key, value)
+      else
+        el.setAttribute(key, value)
+      end
+    end
+
+    # @rbs el: untyped
+    # @rbs old_props: Hash[String, String]
+    # @rbs key: String
+    # @rbs value: String
+    # @rbs return: void
+    def add_event_listener(el, old_props, key, value)
+      return if old_props.key?(key)
+
+      event_name = key.sub(/^@/, "")
+      el.addEventListener(event_name) do |e|
+        @methods[value.to_sym].call(e, @state)
+      end
+    end
+
+    # @rbs el: untyped
+    # @rbs key: String
+    # @rbs value: String
+    # @rbs return: void
+    def update_value_prop(el, key, value)
+      el[:value] = value
+      el.setAttribute(key, value)
     end
   end
 end
