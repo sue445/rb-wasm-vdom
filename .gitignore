@@ -144,3 +144,5 @@ vite.config.ts.timestamp-*
 
 test-results/
 vendor/bundle/
+sig/generated/
+.gem_rbs_collection/

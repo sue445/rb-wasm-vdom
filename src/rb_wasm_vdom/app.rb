@@ -41,9 +41,16 @@ module RbWasmVdom
     # @rbs text: VNode | String
     # @rbs return: String
     def interpolate(text)
-      text.to_s.gsub(/\{\{\s*\w+\s*\}\}/) do |matched|
-        key = matched.match(/\w+/)[0].to_sym
-        @state[key].to_s
+      text.to_s.gsub(/\{\{\s*\w+\s*\}\}/) do |inside_bracket|
+        matched = inside_bracket.match(/\w+/)
+
+        matched_str = matched&.[](0)
+        if matched_str
+          key = matched_str.to_sym
+          @state[key].to_s
+        else
+          inside_bracket
+        end
       end
     end
 
@@ -52,7 +59,7 @@ module RbWasmVdom
     def build_vdom(ast_node)
       return interpolate(ast_node) if ast_node.is_a?(String)
 
-      new_props = {}
+      new_props = {} #: Hash[String, String]
       ast_node.props.each do |k, v|
         new_props[k] = interpolate(v)
       end
@@ -112,12 +119,12 @@ module RbWasmVdom
       current_el = parent_el[:childNodes].item(index)
 
       if old_vnode.nil?
-        parent_el.appendChild(create_element(new_vnode))
+        parent_el.appendChild(create_element(new_vnode)) if new_vnode
       elsif new_vnode.nil?
         parent_el.removeChild(current_el) unless current_el == JS::Null
       elsif changed?(old_vnode, new_vnode)
         parent_el.replaceChild(create_element(new_vnode), current_el)
-      elsif new_vnode.is_a?(VNode)
+      elsif old_vnode.is_a?(VNode) && new_vnode.is_a?(VNode)
         update_props(current_el, old_vnode.props, new_vnode.props)
 
         old_children = old_vnode.children
@@ -148,6 +155,9 @@ module RbWasmVdom
     def changed?(node1, node2)
       return true if node1.class != node2.class
       return node1 != node2 if node1.is_a?(String)
+
+      # @type var node1: VNode
+      # @type var node2: VNode
 
       node1.tag != node2.tag
     end

@@ -1,0 +1,18 @@
+module JS
+  class Object
+    def []: (String | Symbol | Integer key) -> untyped
+    def []=: (String | Symbol | Integer key, untyped value) -> untyped
+    def call: (String | Symbol method_name, *untyped args) -> untyped
+    def to_s: () -> String
+    def to_i: () -> Integer
+    def to_f: () -> Float
+
+    def __RbWasmVdom_parseHTMLToJSON: (String html) -> String
+  end
+
+  def self.eval: (String code) -> JS::Object
+
+  def self.global: () -> JS::Object
+
+  Null: JS::Object
+end
