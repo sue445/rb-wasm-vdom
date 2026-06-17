@@ -33,7 +33,7 @@ for (const integration_test_file of integration_test_files) {
     page.on("pageerror", err => console.error(`[Browser Error] ${err.message}`));
 
     // Open the clean HTML page via local dev server
-    await page.goto(`/test/integration/${integration_test_file}`);
+    await page.goto(`/test/integration/fixture/${integration_test_file}`);
 
     if (integration_test_file.includes("picoruby")) {
       await assertBrowserTestResults(page);
