@@ -50,6 +50,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    concurrency: npm-publish
+
     environment:
       name: npmjs.com
       url: https://www.npmjs.com/package/@sue445/rb-wasm-vdom
