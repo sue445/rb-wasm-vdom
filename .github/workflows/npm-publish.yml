@@ -1,0 +1,163 @@
+name: npm publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: "Argument for npm version"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prerelease
+          - prepatch
+          - preminor
+          - premajor
+
+      preid:
+        description: "Pre-release identifier. Used when version_type is prerelease, prepatch, preminor, or premajor"
+        required: false
+        default: "beta"
+        type: choice
+        options:
+          - beta
+          - rc
+          - alpha
+
+      npm_tag:
+        description: "npm dist-tag"
+        required: true
+        default: "latest"
+        type: choice
+        options:
+          - latest
+          - beta
+          - next
+
+permissions:
+  contents: write
+  id-token: write
+
+env:
+  NODE_VERSION: 24
+
+jobs:
+  publish:
+    if: github.repository == 'sue445/rb-wasm-vdom'
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: npmjs.com
+      url: https://www.npmjs.com/package/@sue445/rb-wasm-vdom
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
+      - name: Validate release inputs
+        run: |
+          case "${VERSION_TYPE}:${NPM_TAG}" in
+            prerelease:latest|prepatch:latest|preminor:latest|premajor:latest)
+              echo "Pre-release version should not be published with npm dist-tag 'latest'."
+              exit 1
+              ;;
+          esac
+        env:
+          VERSION_TYPE: ${{ inputs.version_type }}
+          NPM_TAG: ${{ inputs.npm_tag }}
+
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: https://registry.npmjs.org/
+          cache: npm
+
+      - name: Install latest npm
+        run: npm install -g npm@latest
+
+      - name: Show versions
+        run: |
+          node --version
+          npm --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run tests
+        run: npm test
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version
+        run: |
+          case "${VERSION_TYPE}" in
+            prerelease|prepatch|preminor|premajor)
+              npm version ${VERSION_TYPE} --preid=${PREID}
+              ;;
+            patch|minor|major)
+              npm version ${VERSION_TYPE}
+              ;;
+          esac
+        env:
+          VERSION_TYPE: ${{ inputs.version_type }}
+          PREID: ${{ inputs.preid }}
+
+      - name: Get package version
+        id: package_version
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Push version commit and tag
+        run: git push origin HEAD:${REF_NAME} --follow-tags
+        env:
+          REF_NAME: ${{ github.ref_name }}
+
+      - name: Build
+        run: npm run build
+
+      - name: Check package contents
+        run: npm pack --dry-run
+
+      - name: Publish to npm
+        run: npm publish --provenance --tag ${NPM_TAG}
+        env:
+          NPM_TAG: ${{ inputs.npm_tag }}
+
+      - name: Create GitHub release
+        id: create_release
+        run: |
+          tag_name="$(git describe --tags --abbrev=0)"
+
+          options=()
+          if [[ "${tag_name}" == *-* ]]; then
+            options+=("--prerelease")
+          fi
+
+          gh release create "${tag_name}" --verify-tag --generate-notes "${options[@]}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "Published @sue445/rb-wasm-vdom@${VERSION} with npm dist-tag ${NPM_TAG}" >> "$GITHUB_STEP_SUMMARY"
+        env:
+          VERSION: ${{ steps.package_version.outputs.version }}
+          NPM_TAG: ${{ inputs.npm_tag }}
