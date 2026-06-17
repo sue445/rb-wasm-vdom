@@ -54,7 +54,7 @@ for (const integration_test_file of integration_test_files) {
     }, productionCode);
 
     // Read the separated browser test runner Ruby file and execute it
-    const runnerPath = path.resolve("test/integration/browser_test_runner.rb");
+    const runnerPath = path.resolve("test/integration/helper/browser_test_runner.rb");
     const testSuiteCode = await fs.readFile(runnerPath, "utf8");
 
     await page.evaluate(async (rubyCode) => {
