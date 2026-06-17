@@ -33,7 +33,7 @@ for (const integration_test_file of integration_test_files) {
     page.on("pageerror", err => console.error(`[Browser Error] ${err.message}`));
 
     // Open the clean HTML page via local dev server
-    await page.goto(`/test/integration/${integration_test_file}`);
+    await page.goto(`/test/integration/fixture/${integration_test_file}`);
 
     if (integration_test_file.includes("picoruby")) {
       await assertBrowserTestResults(page);
@@ -54,7 +54,7 @@ for (const integration_test_file of integration_test_files) {
     }, productionCode);
 
     // Read the separated browser test runner Ruby file and execute it
-    const runnerPath = path.resolve("test/integration/browser_test_runner.rb");
+    const runnerPath = path.resolve("test/integration/helper/browser_test_runner.rb");
     const testSuiteCode = await fs.readFile(runnerPath, "utf8");
 
     await page.evaluate(async (rubyCode) => {
