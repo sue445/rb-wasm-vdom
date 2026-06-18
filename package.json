@@ -19,6 +19,7 @@
   "type": "module",
   "main": "./dist/rb-wasm-vdom.es.js",
   "module": "./dist/rb-wasm-vdom.es.js",
+  "jsdelivr": "./dist/rb-wasm-vdom.rb",
   "exports": {
     ".": "./dist/rb-wasm-vdom.es.js",
     "./rb": "./dist/rb-wasm-vdom.rb"
