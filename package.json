@@ -6,7 +6,7 @@
     "ruby.wasm",
     "picoruby.wasm"
   ],
-  "homepage": "https://github.com/sue445/rb-wasm-vdom#readme",
+  "homepage": "https://github.com/sue445/rb-wasm-vdom",
   "bugs": {
     "url": "https://github.com/sue445/rb-wasm-vdom/issues"
   },
