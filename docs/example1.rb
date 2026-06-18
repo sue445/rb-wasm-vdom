@@ -1,21 +1,21 @@
 begin
   # Define the template with variable interpolation and event bindings
   template = <<~HTML
-  <div class="app-container">
-    <h2 style="margin-top: 0; color: #cc342d;">{{ title }}</h2>
+    <div class="app-container">
+      <h2 style="margin-top: 0; color: #cc342d;">{{ title }}</h2>
 
-    <div style="margin-bottom: 15px;">
-      <label>Step value: </label>
-      <input type="number" class="input-box" value="{{ step }}" @input="update_step">
+      <div style="margin-bottom: 15px;">
+        <label>Step value: </label>
+        <input type="number" class="input-box" value="{{ step }}" @input="update_step">
+      </div>
+
+      <p style="font-size: 1.2rem;">Current Count: <strong>{{ count }}</strong></p>
+
+      <button class="btn" @click="increment">+ Increment</button>
+      <button class="btn" @click="decrement">- Decrement</button>
+      <button class="btn" style="background: #666;" @click="reset">Reset</button>
     </div>
-
-    <p style="font-size: 1.2rem;">Current Count: <strong>{{ count }}</strong></p>
-
-    <button class="btn" @click="increment">+ Increment</button>
-    <button class="btn" @click="decrement">- Decrement</button>
-    <button class="btn" style="background: #666;" @click="reset">Reset</button>
-  </div>
-HTML
+  HTML
 
   # Define the reactive state
   state = {
