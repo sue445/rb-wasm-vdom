@@ -11,9 +11,9 @@ RbWasmVdom.create_app(selector, template: template, state: state, methods: metho
 Arguments:
 
 - `selector` — A CSS selector string for the mount target.
-- `template` — An HTML template string.
-- `state` — A Hash that defines the initial reactive state.
-- `methods` — A Hash that defines event handler methods.
+- [`template`](#template) — An HTML template string.
+- [`state`](#state) — A Hash that defines the initial reactive state.
+- [`methods`](#methods) — A Hash that defines event handler methods.
 
 Example:
 
@@ -49,8 +49,8 @@ A template can contain:
 * Normal HTML elements
 * Text nodes
 * Attributes
-* State interpolation with `{{ key }}`
-* Event bindings with `@event="method_name"`
+* [State interpolation](#state-interpolation) with `{{ key }}`
+* [Event bindings](#event-binding) with `@event="method_name"`
 
 Example:
 
