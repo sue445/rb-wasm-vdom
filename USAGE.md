@@ -42,6 +42,8 @@ RbWasmVdom.create_app("#app", template: template, state: state, methods: methods
 
 The template is an HTML string used to describe the UI.
 
+The template must have a single root element. If multiple root elements are provided, only the first element will be rendered.
+
 A template can contain:
 
 * Normal HTML elements
