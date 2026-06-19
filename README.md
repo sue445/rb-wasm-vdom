@@ -5,6 +5,67 @@ A reactive Virtual DOM library for [ruby.wasm](https://github.com/ruby/ruby.wasm
 [![](https://data.jsdelivr.com/v1/package/npm/@sue445/rb-wasm-vdom/badge)](https://www.jsdelivr.com/package/npm/@sue445/rb-wasm-vdom)
 [![build](https://github.com/sue445/rb-wasm-vdom/actions/workflows/build.yml/badge.svg)](https://github.com/sue445/rb-wasm-vdom/actions/workflows/build.yml)
 
+## Quick Start
+```html
+<!-- Using ruby.wasm -->
+<script src="https://cdn.jsdelivr.net/npm/@ruby/head-wasm-wasi/dist/browser.script.iife.min.js"></script>
+
+<!--
+or using Picoruby.wasm
+<script src="https://cdn.jsdelivr.net/npm/@picoruby/wasm-wasi@latest/dist/init.iife.js"></script>
+-->
+
+<script type="text/ruby" src="https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.rb"></script>
+
+<div id="app"></div>
+
+<script type="text/ruby">
+  # Define the template with variable interpolation and event bindings
+  template = <<~HTML
+    <div class="app-container">
+      <h2 style="margin-top: 0; color: #cc342d;">{{ title }}</h2>
+
+      <div style="margin-bottom: 15px;">
+        <label>Step value: </label>
+        <input type="number" class="input-box" value="{{ step }}" @input="update_step">
+      </div>
+
+      <p style="font-size: 1.2rem;">Current Count: <strong>{{ count }}</strong></p>
+
+      <button class="btn" @click="increment">+ Increment</button>
+      <button class="btn" @click="decrement">- Decrement</button>
+      <button class="btn" style="background: #666;" @click="reset">Reset</button>
+    </div>
+  HTML
+
+  # Define the reactive state
+  state = {
+    title: "Ruby Reactivity App",
+    count: 0,
+    step: 1
+  }
+
+  # Define the methods to handle events and mutate the state
+  methods = {
+    increment:   ->(e, s) { s[:count] += s[:step] },
+    decrement:   ->(e, s) { s[:count] -= s[:step] },
+    reset:       ->(e, s) { s[:count] = 0 },
+    update_step: ->(e, s) { s[:step] = e[:target][:value].to_i }
+  }
+
+  # Initialize and mount the application
+  RbWasmVdom.create_app("#app", template: template, state: state, methods: methods)
+</script>
+
+```
+
+## Examples
+* https://sue445.github.io/rb-wasm-vdom/example1-ruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example1-picoruby-wasm.html
+
+## Usage
+For detailed usage, see [USAGE.md](USAGE.md).
+
 ## Development
 ### Run unit test
 At first, install [wasmtime](https://docs.wasmtime.dev/cli-install.html)
