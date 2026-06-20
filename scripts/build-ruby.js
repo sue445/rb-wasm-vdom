@@ -1,9 +1,25 @@
-// scripts/build-ruby.js
 import fs from 'fs';
 import path from 'path';
 
 // Get the project root directory when executed via npm run
 const rootDir = process.cwd();
+
+const magicCommentLines = [
+  '# frozen_string_literal: true',
+  '# rbs_inline: enabled'
+];
+
+const magicCommentBlock = `${magicCommentLines.join('\n')}\n\n`;
+
+const stripMagicComments = code => {
+  let strippedCode = code;
+
+  for (const line of magicCommentLines) {
+    strippedCode = strippedCode.replace(new RegExp(`^${line.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\r?\\n?`, 'gm'), '');
+  }
+
+  return strippedCode.trimStart();
+};
 
 // Specify the files to bundle in dependency order
 const files = [
@@ -27,9 +43,9 @@ if (!fs.existsSync(outputDir)) {
 }
 
 // Read files and concatenate them with double line breaks
-const bundledCode = files.map(file => {
+const bundledCode = magicCommentBlock + files.map(file => {
   const filePath = path.join(rootDir, file);
-  return fs.readFileSync(filePath, 'utf-8');
+  return stripMagicComments(fs.readFileSync(filePath, 'utf-8'));
 }).join('\n\n');
 
 // Write the bundled code to the output file
