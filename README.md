@@ -17,6 +17,11 @@ or using Picoruby.wasm
 
 <script type="text/ruby" src="https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.rb"></script>
 
+<!--
+or specific version
+<script type="text/ruby" src="https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@X.Y.Z/dist/rb-wasm-vdom.rb"></script>
+-->
+
 <div id="app"></div>
 
 <script type="text/ruby">
