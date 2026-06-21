@@ -1,6 +1,7 @@
 begin
   template = <<~HTML
     <div class="app-container">
+      <h2>{{ title }}</h2>
       <ul>
         <li #each="name, score in scores">{{ name }}: {{ score }}</li>
       </ul>
@@ -8,6 +9,7 @@ begin
   HTML
 
   state = {
+    title: "rb-wasm-vdom Example App (Hash Rendering)",
     scores: {
       alice: 90,
       bob: 75,

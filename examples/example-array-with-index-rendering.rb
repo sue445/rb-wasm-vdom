@@ -1,6 +1,7 @@
 begin
   template = <<~HTML
     <div class="app-container">
+      <h2>{{ title }}</h2>
       <ul>
         <li #each="item, index in items">{{ index }}: {{ item }}</li>
       </ul>
@@ -8,6 +9,7 @@ begin
   HTML
 
   state = {
+    title: "rb-wasm-vdom Example App (Array with Index Rendering)",
     items: ["Ruby", "Wasm", "VDOM"]
   }
 

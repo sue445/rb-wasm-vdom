@@ -9,7 +9,7 @@ begin
   HTML
 
   state = {
-    title: "Todo List",
+    title: "rb-wasm-vdom Example App (Array Rendering)",
     items: ["Buy milk", "Write Ruby", "Ship wasm app"]
   }
 
