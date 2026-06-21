@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>rb-wasm-vdom Example (using picoruby.wasm)</title>
+  <title>rb-wasm-vdom Example (using ruby.wasm)</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@picoruby/wasm-wasi@latest/dist/init.iife.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ruby/head-wasm-wasi/dist/browser.script.iife.min.js"></script>
   <script type="text/ruby" src="https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.rb"></script>
 
   <style>
@@ -18,11 +18,11 @@
 </head>
 <body>
 
-<h1>rb-wasm-vdom Example (using picoruby.wasm)</h1>
+<h1>rb-wasm-vdom Example (using ruby.wasm)</h1>
 
 <div id="app">Loading Ruby VM...</div>
 
-<script type="text/ruby" src="./example1.rb"></script>
+<script type="text/ruby" src="example-dynamic-rendering.rb"></script>
 
 </body>
 </html>
