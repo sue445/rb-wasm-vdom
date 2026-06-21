@@ -23,3 +23,8 @@ namespace :rbs do
     sh "steep check"
   end
 end
+
+desc "Run all static analysis (RuboCop, Steep)"
+task lint: [:rubocop, "rbs:check"]
+
+task default: :lint
