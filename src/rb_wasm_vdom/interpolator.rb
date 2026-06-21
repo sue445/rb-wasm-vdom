@@ -12,21 +12,27 @@ module RbWasmVdom
     end
 
     # @rbs text: String
-    def call(text)
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: String
+    def call(text, locals = {})
       text.to_s.gsub(PLACEHOLDER_PATTERN) do |placeholder|
-        interpolate_placeholder(placeholder)
+        interpolate_placeholder(placeholder, locals)
       end
     end
 
     private
 
     # @rbs placeholder: String
+    # @rbs locals: Hash[Symbol, untyped]
     # @rbs return: String
-    def interpolate_placeholder(placeholder)
+    def interpolate_placeholder(placeholder, locals)
       key = placeholder.match(KEY_PATTERN)&.[](0)
       return placeholder unless key
 
-      @state[key.to_sym].to_s
+      symbol_key = key.to_sym
+      return locals[symbol_key].to_s if locals.key?(symbol_key)
+
+      @state[symbol_key].to_s
     end
   end
 end

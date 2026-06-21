@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rb-wasm-vdom Example (using ruby.wasm)</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@ruby/head-wasm-wasi/dist/browser.script.iife.min.js"></script>
+
+  <script type="text/ruby" src="../dist/rb-wasm-vdom.rb"></script>
+
+  <style>
+      body { font-family: sans-serif; padding: 2rem; color: #333; }
+      .app-container { border: 2px solid #cc342d; padding: 20px; border-radius: 8px; max-width: 400px; background: #fffafaa0; }
+      .btn { padding: 8px 16px; margin-right: 8px; cursor: pointer; background: #cc342d; color: white; border: none; border-radius: 4px; font-weight: bold; }
+      .btn:hover { background: #a82721; }
+      .input-box { padding: 8px; width: 80px; border: 1px solid #ccc; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<h1>rb-wasm-vdom Example (using ruby.wasm)</h1>
+
+<div id="app">Loading Ruby VM...</div>
+
+<script type="text/ruby" src="example-reactivity.rb"></script>
+
+</body>
+</html>

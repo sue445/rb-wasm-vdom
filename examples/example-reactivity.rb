@@ -19,7 +19,7 @@ begin
 
   # Define the reactive state
   state = {
-    title: "Ruby Reactivity App",
+    title: "rb-wasm-vdom Example App (Reactivity)",
     count: 0,
     step: 1
   }

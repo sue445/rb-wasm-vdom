@@ -5,6 +5,7 @@ module RbWasmVdom
   # Framework Core
   class App
     include Patcher
+    include EachRenderer
 
     # @rbs selector: String
     # @rbs template: String
@@ -45,15 +46,7 @@ module RbWasmVdom
     # @rbs ast_node: VNode | String
     # @rbs return: VNode | String
     def build_vdom(ast_node)
-      return @interpolator.call(ast_node) if ast_node.is_a?(String)
-
-      new_props = {} #: Hash[String, String]
-      ast_node.props.each do |k, v|
-        new_props[k] = @interpolator.call(v)
-      end
-
-      new_children = ast_node.children.map { |child| build_vdom(child) }
-      VNode.new(ast_node.tag, new_props, new_children)
+      build_vdom_nodes(ast_node).first
     end
   end
 end

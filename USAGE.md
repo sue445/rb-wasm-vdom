@@ -82,6 +82,139 @@ state = {
 }
 ```
 
+## List Rendering
+
+Use `#each` to render a list from an Array or Hash in the state.
+
+`#each` is an rb-wasm-vdom directive. It is used only for rendering and is not added to the final DOM element.
+
+### Array rendering
+
+Use `item in items` to render each item in an Array.
+
+```ruby
+template = <<~HTML
+  <div>
+    <h2>{{ title }}</h2>
+    <ul>
+      <li #each="item in items">{{ item }}</li>
+    </ul>
+  </div>
+HTML
+
+state = {
+  title: "Todo List",
+  items: ["Buy milk", "Write Ruby", "Ship wasm app"]
+}
+
+RbWasmVdom.create_app("#app", template: template, state: state)
+```
+
+This renders one `<li>` element for each item in `items`.
+
+```html
+<ul>
+  <li>Buy milk</li>
+  <li>Write Ruby</li>
+  <li>Ship wasm app</li>
+</ul>
+```
+
+### Array rendering with index
+
+Use `item, index in items` to access both the item and its index.
+
+```ruby
+template = <<~HTML
+  <div>
+    <h2>{{ title }}</h2>
+    <ul>
+      <li #each="item, index in items">{{ index }}: {{ item }}</li>
+    </ul>
+  </div>
+HTML
+
+state = {
+  title: "Languages",
+  items: ["Ruby", "Wasm", "VDOM"]
+}
+
+RbWasmVdom.create_app("#app", template: template, state: state)
+```
+
+This renders:
+
+```html
+<ul>
+  <li>0: Ruby</li>
+  <li>1: Wasm</li>
+  <li>2: VDOM</li>
+</ul>
+```
+
+### Hash rendering
+
+Use `key, value in hash` to render each key-value pair in a Hash.
+
+The order follows Ruby's `Hash#each` style: key first, value second.
+
+```ruby
+template = <<~HTML
+  <div>
+    <h2>{{ title }}</h2>
+    <ul>
+      <li #each="name, score in scores">{{ name }}: {{ score }}</li>
+    </ul>
+  </div>
+HTML
+
+state = {
+  title: "Scores",
+  scores: {
+    alice: 90,
+    bob: 75,
+    carol: 88
+  }
+}
+
+RbWasmVdom.create_app("#app", template: template, state: state)
+```
+
+This renders:
+
+```html
+<ul>
+  <li>alice: 90</li>
+  <li>bob: 75</li>
+  <li>carol: 88</li>
+</ul>
+```
+
+### Supported syntax
+
+Currently, `#each` supports the following forms:
+
+```html
+<li #each="item in items">{{ item }}</li>
+```
+
+```html
+<li #each="item, index in items">{{ index }}: {{ item }}</li>
+```
+
+```html
+<li #each="key, value in scores">{{ key }}: {{ value }}</li>
+```
+
+The collection name must refer to a Symbol key in the state Hash.
+
+```ruby
+state = {
+  items: ["Ruby", "Wasm"],
+  scores: { alice: 90 }
+}
+```
+
 ## Event binding
 
 Use attributes in the form `@event="method_name"` to bind DOM events to methods.

@@ -65,8 +65,14 @@ or specific version
 ```
 
 ## Examples
-* https://sue445.github.io/rb-wasm-vdom/example-dynamic-rendering-ruby-wasm.html
-* https://sue445.github.io/rb-wasm-vdom/example-dynamic-rendering-picoruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example-reactivity-ruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example-reactivity-picoruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example-array-rendering-ruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example-array-rendering-picoruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example-array-with-index-rendering-ruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example-array-with-index-rendering-picoruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example-hash-rendering-ruby-wasm.html
+* https://sue445.github.io/rb-wasm-vdom/example-hash-rendering-picoruby-wasm.html
 
 ## Usage
 For detailed usage, see [USAGE.md](USAGE.md).

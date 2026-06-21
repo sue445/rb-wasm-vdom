@@ -26,7 +26,7 @@ for (const example_file of example_files) {
     await page.goto(`/examples/${example_file}`);
 
     await expect(page.locator("#app .app-container")).toBeVisible({ timeout: 15000 });
-    await expect(page.locator("#app")).toContainText("Ruby Reactivity App");
+    await expect(page.locator("#app")).toContainText("rb-wasm-vdom Example App");
 
     expect(errors).toEqual([]);
   });
