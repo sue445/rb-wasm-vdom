@@ -110,7 +110,7 @@ module RbWasmVdom
       return [::Regexp.last_match(1), nil, ::Regexp.last_match(2)] if expression =~ /\A\s*(\w+)\s+in\s+(\w+)\s*\z/
 
       return [::Regexp.last_match(1), ::Regexp.last_match(2), 
-::Regexp.last_match(3)] if expression =~ /\A\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*\z/
+              ::Regexp.last_match(3)] if expression =~ /\A\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*\z/
 
       nil
     end
