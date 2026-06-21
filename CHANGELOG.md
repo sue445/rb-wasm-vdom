@@ -1,5 +1,12 @@
 ## Unreleased
-[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.1.1...main)
+[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.2.0...main)
+
+## [v0.2.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.2.0)
+
+* Make `template`, `state`, and `methods` optional
+  * https://github.com/sue445/rb-wasm-vdom/pull/39
+* Support list rendering
+  * https://github.com/sue445/rb-wasm-vdom/pull/40
 
 ## [v0.1.1](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.1.1)
 
