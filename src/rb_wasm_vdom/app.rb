@@ -107,26 +107,35 @@ module RbWasmVdom
     # @rbs expression: String
     # @rbs return: [String, String?, String]?
     def parse_each_expression(expression)
-      single_value_match = expression.match(/\A\s*(\w+)\s+in\s+(\w+)\s*\z/)
-      if single_value_match
-        value_name = single_value_match[1]
-        collection_name = single_value_match[2]
-        return nil unless value_name && collection_name
+      parse_each_single_value_expression(expression) ||
+        parse_each_pair_expression(expression)
+    end
 
-        return [value_name, nil, collection_name]
-      end
+    # @rbs expression: String
+    # @rbs return: [String, nil, String]?
+    def parse_each_single_value_expression(expression)
+      match = expression.match(/\A\s*(\w+)\s+in\s+(\w+)\s*\z/)
+      return nil unless match
 
-      key_value_match = expression.match(/\A\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*\z/)
-      if key_value_match
-        first_name = key_value_match[1]
-        second_name = key_value_match[2]
-        collection_name = key_value_match[3]
-        return nil unless first_name && second_name && collection_name
+      value_name = match[1]
+      collection_name = match[2]
+      return nil unless value_name && collection_name
 
-        return [first_name, second_name, collection_name]
-      end
+      [value_name, nil, collection_name]
+    end
 
-      nil
+    # @rbs expression: String
+    # @rbs return: [String, String, String]?
+    def parse_each_pair_expression(expression)
+      match = expression.match(/\A\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*\z/)
+      return nil unless match
+
+      first_name = match[1]
+      second_name = match[2]
+      collection_name = match[3]
+      return nil unless first_name && second_name && collection_name
+
+      [first_name, second_name, collection_name]
     end
 
     # @rbs ast_node: VNode
