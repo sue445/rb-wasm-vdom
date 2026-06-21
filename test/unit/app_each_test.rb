@@ -9,7 +9,7 @@ require_relative "../../src/rb_wasm_vdom/app"
 
 class AppEachTest < SimpleTestCase
   def test_build_vdom_expands_array_with_each
-    app = build_test_app(items: ["Ruby", "Wasm", "VDOM"])
+    app = build_test_app(items: %w[Ruby Wasm VDOM])
 
     ast = RbWasmVdom::VNode.new(
       "ul",
@@ -38,7 +38,7 @@ class AppEachTest < SimpleTestCase
   end
 
   def test_build_vdom_expands_array_with_index
-    app = build_test_app(items: ["Ruby", "Wasm"])
+    app = build_test_app(items: %w[Ruby Wasm])
 
     ast = RbWasmVdom::VNode.new(
       "ol",
@@ -82,7 +82,7 @@ class AppEachTest < SimpleTestCase
   end
 
   def test_build_vdom_interpolates_each_locals_in_props
-    app = build_test_app(items: ["ruby", "wasm"])
+    app = build_test_app(items: %w[ruby wasm])
 
     ast = RbWasmVdom::VNode.new(
       "ul",
