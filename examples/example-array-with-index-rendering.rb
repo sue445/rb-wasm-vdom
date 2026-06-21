@@ -1,8 +1,10 @@
 begin
   template = <<~HTML
-    <ul>
-      <li #each="item, index in items">{{ index }}: {{ item }}</li>
-    </ul>
+    <div class="app-container">
+      <ul>
+        <li #each="item, index in items">{{ index }}: {{ item }}</li>
+      </ul>
+    </div>
   HTML
 
   state = {

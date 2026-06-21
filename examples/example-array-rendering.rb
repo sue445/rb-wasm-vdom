@@ -1,6 +1,6 @@
 begin
   template = <<~HTML
-    <div>
+    <div class="app-container">
       <h2>{{ title }}</h2>
       <ul>
         <li #each="item in items">{{ item }}</li>

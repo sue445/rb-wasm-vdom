@@ -1,8 +1,10 @@
 begin
   template = <<~HTML
-    <ul>
-      <li #each="name, score in scores">{{ name }}: {{ score }}</li>
-    </ul>
+    <div class="app-container">
+      <ul>
+        <li #each="name, score in scores">{{ name }}: {{ score }}</li>
+      </ul>
+    </div>
   HTML
 
   state = {
