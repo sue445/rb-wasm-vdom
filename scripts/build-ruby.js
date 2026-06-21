@@ -29,6 +29,7 @@ const files = [
   'src/rb_wasm_vdom/dom_renderer.rb',
   'src/rb_wasm_vdom/patcher.rb',
   'src/rb_wasm_vdom/interpolator.rb',
+  'src/rb_wasm_vdom/each_renderer.rb',
   'src/rb_wasm_vdom/app.rb',
   'src/rb_wasm_vdom.rb'
 ];

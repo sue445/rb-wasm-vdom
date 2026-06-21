@@ -5,6 +5,7 @@ require_relative "../../src/rb_wasm_vdom/reactive_state"
 require_relative "../../src/rb_wasm_vdom/interpolator"
 require_relative "../../src/rb_wasm_vdom/dom_renderer"
 require_relative "../../src/rb_wasm_vdom/patcher"
+require_relative "../../src/rb_wasm_vdom/each_renderer"
 require_relative "../../src/rb_wasm_vdom/app"
 
 class AppEachTest < SimpleTestCase
