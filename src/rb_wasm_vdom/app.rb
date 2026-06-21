@@ -45,15 +45,109 @@ module RbWasmVdom
     # @rbs ast_node: VNode | String
     # @rbs return: VNode | String
     def build_vdom(ast_node)
-      return @interpolator.call(ast_node) if ast_node.is_a?(String)
+      build_vdom_nodes(ast_node).first
+    end
 
+    # @rbs ast_node: VNode | String
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_vdom_nodes(ast_node, locals = {})
+      return [@interpolator.call(ast_node, locals)] if ast_node.is_a?(String)
+
+      each_expression = ast_node.props["#each"]
+      return build_each_nodes(ast_node, each_expression, locals) if each_expression
+
+      [build_single_vnode(ast_node, locals)]
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: VNode
+    def build_single_vnode(ast_node, locals)
       new_props = {} #: Hash[String, String]
-      ast_node.props.each do |k, v|
-        new_props[k] = @interpolator.call(v)
+      ast_node.props.each do |key, value|
+        next if key == "#each"
+
+        new_props[key] = @interpolator.call(value, locals)
       end
 
-      new_children = ast_node.children.map { |child| build_vdom(child) }
+      new_children = ast_node.children.flat_map { |child| build_vdom_nodes(child, locals) }
       VNode.new(ast_node.tag, new_props, new_children)
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs expression: String
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_each_nodes(ast_node, expression, locals)
+      parsed = parse_each_expression(expression)
+      return [build_single_vnode(ast_node, locals)] unless parsed
+
+      first_name, second_name, collection_name = parsed
+      collection = @state[collection_name.to_sym]
+
+      build_collection_nodes(ast_node, collection, first_name, second_name, locals)
+    end
+
+    # @rbs expression: String
+    # @rbs return: [String, String?, String]?
+    def parse_each_expression(expression)
+      if expression =~ /\A\s*(\w+)\s+in\s+(\w+)\s*\z/
+        return [$1, nil, $2]
+      end
+
+      if expression =~ /\A\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*\z/
+        return [$1, $2, $3]
+      end
+
+      nil
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs collection: untyped
+    # @rbs first_name: String
+    # @rbs second_name: String?
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_collection_nodes(ast_node, collection, first_name, second_name, locals)
+      case collection
+      when Array
+        build_array_nodes(ast_node, collection, first_name, second_name, locals)
+      when Hash
+        build_hash_nodes(ast_node, collection, first_name, second_name, locals)
+      else
+        []
+      end
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs collection: Array[untyped]
+    # @rbs item_name: String
+    # @rbs index_name: String?
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_array_nodes(ast_node, collection, item_name, index_name, locals)
+      collection.each_with_index.map do |item, index|
+        item_locals = locals.merge(item_name.to_sym => item)
+        item_locals[index_name.to_sym] = index if index_name
+
+        build_single_vnode(ast_node, item_locals)
+      end
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs collection: Hash[untyped, untyped]
+    # @rbs key_name: String
+    # @rbs value_name: String?
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_hash_nodes(ast_node, collection, key_name, value_name, locals)
+      collection.map do |key, value|
+        item_locals = locals.merge(key_name.to_sym => key)
+        item_locals[value_name.to_sym] = value if value_name
+
+        build_single_vnode(ast_node, item_locals)
+      end
     end
   end
 end
