@@ -107,11 +107,23 @@ module RbWasmVdom
     # @rbs expression: String
     # @rbs return: [String, String?, String]?
     def parse_each_expression(expression)
-      return [::Regexp.last_match(1), nil, ::Regexp.last_match(2)] if expression =~ /\A\s*(\w+)\s+in\s+(\w+)\s*\z/
+      single_value_match = expression.match(/\A\s*(\w+)\s+in\s+(\w+)\s*\z/)
+      if single_value_match
+        value_name = single_value_match[1]
+        collection_name = single_value_match[2]
+        return nil unless value_name && collection_name
 
-      if expression =~ /\A\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*\z/
-        return [::Regexp.last_match(1), ::Regexp.last_match(2),
-                ::Regexp.last_match(3)]
+        return [value_name, nil, collection_name]
+      end
+
+      key_value_match = expression.match(/\A\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*\z/)
+      if key_value_match
+        first_name = key_value_match[1]
+        second_name = key_value_match[2]
+        collection_name = key_value_match[3]
+        return nil unless first_name && second_name && collection_name
+
+        return [first_name, second_name, collection_name]
       end
 
       nil
