@@ -1,9 +1,11 @@
 import { test, expect } from "@playwright/test";
+import fs from "node:fs";
+import path from "node:path";
 
-const example_files = [
-  "example1-picoruby-wasm.html",
-  "example1-ruby-wasm.html"
-];
+const examplesDir = path.join(process.cwd(), "examples");
+const example_files = fs
+  .readdirSync(examplesDir)
+  .filter((file) => file.endsWith(".html"));
 
 for (const example_file of example_files) {
   test(`/examples/${example_file} does not output browser console errors`, async ({ page }) => {
