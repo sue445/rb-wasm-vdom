@@ -71,7 +71,7 @@ module RbWasmVdom
     # @rbs expression: String
     # @rbs return: [String, nil, String]?
     def parse_each_single_value_expression(expression)
-      match = expression.match(/\A\s*(\w+)\s+in\s+(\w+)\s*\z/)
+      match = expression.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/)
       return nil unless match
 
       value_name = match[1]
@@ -84,7 +84,7 @@ module RbWasmVdom
     # @rbs expression: String
     # @rbs return: [String, String, String]?
     def parse_each_pair_expression(expression)
-      match = expression.match(/\A\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*\z/)
+      match = expression.match(/^\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*$/)
       return nil unless match
 
       first_name = match[1]
