@@ -71,8 +71,23 @@ module RbWasmVdom
         new_props[key] = @interpolator.call(value, locals)
       end
 
-      new_children = ast_node.children.flat_map { |child| build_vdom_nodes(child, locals) }
+      new_children = build_child_nodes(ast_node.children, locals)
       VNode.new(ast_node.tag, new_props, new_children)
+    end
+
+    # @rbs children: Array[VNode | String]
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_child_nodes(children, locals)
+      new_children = [] #: Array[VNode | String]
+
+      children.each do |child|
+        build_vdom_nodes(child, locals).each do |new_child|
+          new_children << new_child
+        end
+      end
+
+      new_children
     end
 
     # @rbs ast_node: VNode
