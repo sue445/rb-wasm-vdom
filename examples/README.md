@@ -10,5 +10,5 @@ npx vite --host 127.0.0.1
 
 Please open the following in your browser
 
-* http://127.0.0.1:5173/examples/example-dynamic-rendering-picoruby-wasm.html
-* http://127.0.0.1:5173/examples/example-dynamic-rendering-ruby-wasm.html
+* http://127.0.0.1:5173/examples/example-reactivity-picoruby-wasm.html
+* http://127.0.0.1:5173/examples/example-reactivity-ruby-wasm.html
