@@ -186,3 +186,9 @@ jobs:
         env:
           VERSION: ${{ steps.package_version.outputs.version }}
           NPM_TAG: ${{ inputs.npm_tag }}
+
+      - name: Wait for npm registry propagation
+        run: sleep 60
+
+      - name: Purge jsDelivr cache
+        run: curl -s https://purge.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.rb
