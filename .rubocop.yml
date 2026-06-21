@@ -16,6 +16,14 @@ AllCops:
 Layout/LeadingCommentSpace:
   AllowRBSInlineAnnotation: true
 
+Metrics/AbcSize:
+  Exclude:
+    - 'test/**/*'
+
+Metrics/ClassLength:
+  Exclude:
+    - 'test/**/*'
+
 Metrics/MethodLength:
   Exclude:
     - 'test/**/*'
