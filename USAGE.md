@@ -50,6 +50,7 @@ A template can contain:
 * Text nodes
 * Attributes
 * [State interpolation](#state-interpolation) with `{{ key }}`
+* [List Rendering](#list-rendering) with `#each="item in items"` (`Array`), `#each="item, index in items"` (`Array`) or `#each="key, value in hash"` (`Hash`)
 * [Event bindings](#event-binding) with `@event="method_name"`
 
 Example:
