@@ -65,14 +65,13 @@ or specific version
 ```
 
 ## Examples
-* https://sue445.github.io/rb-wasm-vdom/example-reactivity-ruby-wasm.html
-* https://sue445.github.io/rb-wasm-vdom/example-reactivity-picoruby-wasm.html
-* https://sue445.github.io/rb-wasm-vdom/example-array-rendering-ruby-wasm.html
-* https://sue445.github.io/rb-wasm-vdom/example-array-rendering-picoruby-wasm.html
-* https://sue445.github.io/rb-wasm-vdom/example-array-with-index-rendering-ruby-wasm.html
-* https://sue445.github.io/rb-wasm-vdom/example-array-with-index-rendering-picoruby-wasm.html
-* https://sue445.github.io/rb-wasm-vdom/example-hash-rendering-ruby-wasm.html
-* https://sue445.github.io/rb-wasm-vdom/example-hash-rendering-picoruby-wasm.html
+
+| Name                       | Source                                                                                    | Browse on ruby.wasm                                                                            | Browse on Picoruby.wasm                                                                            |
+|----------------------------|-------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| Reactivity App             | [example-reactivity.rb ](examples/example-reactivity.rb )                                 | [See](https://sue445.github.io/rb-wasm-vdom/example-reactivity-ruby-wasm.html)                 | [See](https://sue445.github.io/rb-wasm-vdom/example-reactivity-picoruby-wasm.html)                 |
+| Array Rendering            | [example-array-rendering.rb](examples/example-array-rendering.rb)                         | [See](https://sue445.github.io/rb-wasm-vdom/example-array-rendering-ruby-wasm.html)            | [See](https://sue445.github.io/rb-wasm-vdom/example-array-rendering-picoruby-wasm.html)            |
+| Array with Index Rendering | [example-array-with-index-rendering.rb ](examples/example-array-with-index-rendering.rb ) | [See](https://sue445.github.io/rb-wasm-vdom/example-array-with-index-rendering-ruby-wasm.html) | [See](https://sue445.github.io/rb-wasm-vdom/example-array-with-index-rendering-picoruby-wasm.html) |
+| Hash Rendering             | [example-hash-rendering.rb ](examples/example-hash-rendering.rb )                         | [See](https://sue445.github.io/rb-wasm-vdom/example-hash-rendering-ruby-wasm.html)             | [See](https://sue445.github.io/rb-wasm-vdom/example-hash-rendering-picoruby-wasm.html)             |
 
 ## Usage
 For detailed usage, see [USAGE.md](USAGE.md).
