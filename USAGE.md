@@ -83,6 +83,53 @@ state = {
 }
 ```
 
+Interpolation also supports nested values and public method calls.
+
+```html
+<p>{{ user.name }}</p>
+<p>{{ user[:name] }}</p>
+<p>{{ user.name.upcase }}</p>
+<p>{{ user.name.gsub("R", "L") }}</p>
+<p>{{ user.name.include?("R") }}</p>
+<p>{{ user.name.slice(0, 2) }}</p>
+```
+
+For nested values, rb-wasm-vdom resolves Hash keys first, then calls public methods.
+
+```ruby
+state = {
+  user: {
+    name: "Ruby"
+  }
+}
+```
+
+The examples above render values such as:
+
+```html
+<p>Ruby</p>
+<p>Ruby</p>
+<p>RUBY</p>
+<p>Luby</p>
+<p>true</p>
+<p>Ru</p>
+```
+
+Method arguments can be strings, integers, floats, booleans, or `nil`.
+
+```html
+<p>{{ user.name.gsub("Ruby", "Wasm") }}</p>
+<p>{{ user.name.slice(0, 2) }}</p>
+```
+
+If an expression cannot be resolved or a method call raises an error, the original placeholder is left unchanged.
+
+```html
+<p>{{ user.unknown_value }}</p>
+```
+
+Because interpolation can call public methods, use templates you trust.
+
 ## List Rendering
 
 Use `#each` to render a list from an Array or Hash in the state.

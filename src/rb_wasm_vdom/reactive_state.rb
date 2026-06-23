@@ -18,6 +18,11 @@ module RbWasmVdom
       @data[key]
     end
 
+    # @rbs return: Array[Symbol]
+    def keys
+      @data.keys
+    end
+
     # @rbs key: Symbol
     # @rbs value: untyped
     # @rbs return: void
