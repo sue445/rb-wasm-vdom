@@ -1,4 +1,3 @@
-// scripts/run-unit-tests.js
 import fs from "fs/promises";
 import { WASI } from "wasi";
 
@@ -11,9 +10,9 @@ async function main() {
 
   // Configure package names and paths based on the requested VM
   switch (vmType) {
-    case "picoruby":
-      jsPkgName = "picoruby-wasm";
-      wasmPath = "node_modules/picoruby-wasm/dist/picoruby.wasm";
+    case "picoruby-wasm-wasi-latest":
+      jsPkgName = "@picoruby/wasm-wasi";
+      wasmPath = "node_modules/@picoruby/wasm-wasi/dist/picoruby.wasm";
       break;
     case "ruby-wasm-head":
     default:
