@@ -16,6 +16,7 @@ jobs:
       matrix:
         test_task:
           - ruby-wasm-head
+          - picoruby-wasm-wasi-latest
 
     env:
       TEST_TASK: ${{ matrix.test_task }}
