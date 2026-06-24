@@ -1,5 +1,10 @@
 ## Unreleased
-[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.2.0...main)
+[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.3.0...main)
+
+## [v0.3.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.3.0)
+
+* Support method calls with arguments in interpolations
+  * https://github.com/sue445/rb-wasm-vdom/pull/49
 
 ## [v0.2.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.2.0)
 
