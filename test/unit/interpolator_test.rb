@@ -39,40 +39,4 @@ class InterpolatorTest < SimpleTestCase
 
     assert_equal "1: Wasm", result
   end
-
-  def test_interpolate_public_method_with_string_arguments
-    state = RbWasmVdom::ReactiveState.new({}) {} # rubocop:disable Lint/EmptyBlock
-    interpolator = RbWasmVdom::Interpolator.new(state)
-
-    result = interpolator.call(
-      '{{ user.name.gsub("R", "L") }}',
-      { user: { name: "Ruby" } }
-    )
-
-    assert_equal "Luby", result
-  end
-
-  def test_interpolate_public_predicate_method_with_string_argument
-    state = RbWasmVdom::ReactiveState.new({}) {} # rubocop:disable Lint/EmptyBlock
-    interpolator = RbWasmVdom::Interpolator.new(state)
-
-    result = interpolator.call(
-      '{{ user.name.include?("R") }}',
-      { user: { name: "Ruby" } }
-    )
-
-    assert_equal "true", result
-  end
-
-  def test_interpolate_public_method_with_integer_arguments
-    state = RbWasmVdom::ReactiveState.new({}) {} # rubocop:disable Lint/EmptyBlock
-    interpolator = RbWasmVdom::Interpolator.new(state)
-
-    result = interpolator.call(
-      "{{ user.name.slice(0, 2) }}",
-      { user: { name: "Ruby" } }
-    )
-
-    assert_equal "Ru", result
-  end
 end

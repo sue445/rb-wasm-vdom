@@ -34,10 +34,12 @@
     "test": "npm run test:unit && npm run test:integration && npm run test:integration",
     "test:build": "node --test 'test/build/*.test.js'",
     "test:integration": "npm run build && playwright test test/integration/",
-    "test:unit": "npm run test:unit:ruby-wasm-head",
+    "test:unit": "npm run test:unit:ruby-wasm-head && npm run test:unit:picoruby-wasm-wasi-latest",
+    "test:unit:picoruby-wasm-wasi-latest": "node scripts/run-unit-tests.js picoruby-wasm-wasi-latest",
     "test:unit:ruby-wasm-head": "node scripts/run-unit-tests.js ruby-wasm-head"
   },
   "devDependencies": {
+    "@picoruby/wasm-wasi": "^4.0.0",
     "@playwright/test": "^1.60.0",
     "@ruby/head-wasm-wasi": "^2.9.3-2.9.4",
     "vite": "^8.0.16"

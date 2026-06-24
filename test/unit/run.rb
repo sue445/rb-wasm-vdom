@@ -31,10 +31,10 @@ class SimpleTestCase
   end
 end
 
-# Automatically find and require all *_test.rb files in the test directory
-# Exclude subdirectories by searching directly inside "./test"
-Dir.glob("./test/unit/*_test.rb").each do |file|
-  require file
+unless Object.const_defined?(:PICORUBY_CONCATENATED_TEST)
+  Dir.glob("./test/unit/*_test.rb").each do |file|
+    require file
+  end
 end
 
 # Test runner execution logic
@@ -64,6 +64,7 @@ end
 puts "\n\n📊 Test Results:"
 puts "  Passed: #{success_count}"
 puts "  Failed: #{failure_count}"
+puts "__RB_WASM_VDOM_UNIT_TEST_RESULT__:#{success_count}:#{failure_count}"
 
 # Exit with non-zero code if any test failed
 exit(1) if failure_count.positive?
