@@ -45,7 +45,7 @@ class InterpolatorTest < SimpleTestCase
     interpolator = RbWasmVdom::Interpolator.new(state)
 
     result = interpolator.call(
-      '{{ user.name.gsub("R", "L") }}',
+      '{{ user[:name].gsub("R", "L") }}',
       { user: { name: "Ruby" } }
     )
 
@@ -57,7 +57,7 @@ class InterpolatorTest < SimpleTestCase
     interpolator = RbWasmVdom::Interpolator.new(state)
 
     result = interpolator.call(
-      '{{ user.name.include?("R") }}',
+      '{{ user[:name].include?("R") }}',
       { user: { name: "Ruby" } }
     )
 
@@ -69,7 +69,7 @@ class InterpolatorTest < SimpleTestCase
     interpolator = RbWasmVdom::Interpolator.new(state)
 
     result = interpolator.call(
-      "{{ user.name.slice(0, 2) }}",
+      "{{ user[:name].slice(0, 2) }}",
       { user: { name: "Ruby" } }
     )
 
