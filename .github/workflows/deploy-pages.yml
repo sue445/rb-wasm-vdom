@@ -37,8 +37,15 @@ jobs:
           mkdir -p ${WORK_DIR}
           cp examples/* ${WORK_DIR}
 
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: .tool-versions
+
       - name: Replace "../dist/rb-wasm-vdom.rb" to jsdelivr url in *.html
-        run: find ${WORK_DIR} -type f -name "*.html" -print0 | xargs -0 sed -i 's|../dist/rb-wasm-vdom.rb|https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.rb|g'
+        run: |
+          version=$(node -p "require('./package.json').version")
+          find ${WORK_DIR} -type f -name "*.html" -print0 | xargs -0 sed -i "s|../dist/rb-wasm-vdom.rb|https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@${version}/dist/rb-wasm-vdom.rb|g"
 
       - name: Setup Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
