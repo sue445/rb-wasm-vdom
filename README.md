@@ -78,17 +78,15 @@ or specific version
 For detailed usage, see [USAGE.md](USAGE.md).
 
 ## Development
-### Run unit test
+### Run test
 At first, install [wasmtime](https://docs.wasmtime.dev/cli-install.html)
+
+e.g.
 
 * Mac: `brew install wasmtime`
 
 ```bash
-npm run test:unit
-```
-
-### Run integration test
-```bash
-npx playwright install
-npm run test:integration
+npm install
+npx playwright install chromium
+npm test
 ```
