@@ -83,18 +83,7 @@ state = {
 }
 ```
 
-Interpolation also supports nested values and public method calls.
-
-```html
-<p>{{ user.name }}</p>
-<p>{{ user[:name] }}</p>
-<p>{{ user.name.upcase }}</p>
-<p>{{ user.name.gsub("R", "L") }}</p>
-<p>{{ user.name.include?("R") }}</p>
-<p>{{ user.name.slice(0, 2) }}</p>
-```
-
-For nested values, rb-wasm-vdom resolves Hash keys first, then calls public methods.
+Interpolation also supports nested Hash values with explicit `[]` access and public method calls on resolved values.
 
 ```ruby
 state = {
@@ -102,6 +91,14 @@ state = {
     name: "Ruby"
   }
 }
+```
+
+```html
+<p>{{ user[:name] }}</p>
+<p>{{ user[:name].upcase }}</p>
+<p>{{ user[:name].gsub("R", "L") }}</p>
+<p>{{ user[:name].include?("R") }}</p>
+<p>{{ user[:name].slice(0, 2) }}</p>
 ```
 
 The examples above render values such as:
@@ -115,11 +112,35 @@ The examples above render values such as:
 <p>Ru</p>
 ```
 
+For nested Hash values, use `[]` access with the appropriate key type.
+
+```html
+<p>{{ user[:name] }}</p>
+```
+
+Hash keys are not resolved as method calls. For example, if `user` is a Hash, the following expression is not treated as `user[:name]`.
+
+```html
+<p>{{ user.name }}</p>
+```
+
+If a Hash key does not exist, it renders as an empty string.
+
+```html
+<p>{{ user[:unknown] }}</p>
+```
+
+This renders:
+
+```html
+<p></p>
+```
+
 Method arguments can be strings, integers, floats, booleans, or `nil`.
 
 ```html
-<p>{{ user.name.gsub("Ruby", "Wasm") }}</p>
-<p>{{ user.name.slice(0, 2) }}</p>
+<p>{{ user[:name].gsub("Ruby", "Wasm") }}</p>
+<p>{{ user[:name].slice(0, 2) }}</p>
 ```
 
 If an expression cannot be resolved or a method call raises an error, the original placeholder is left unchanged.
@@ -128,7 +149,7 @@ If an expression cannot be resolved or a method call raises an error, the origin
 <p>{{ user.unknown_value }}</p>
 ```
 
-Because interpolation can call public methods, use templates you trust.
+Because interpolation evaluates Ruby expressions, use templates you trust.
 
 ## List Rendering
 

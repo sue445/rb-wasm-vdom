@@ -75,4 +75,28 @@ class InterpolatorTest < SimpleTestCase
 
     assert_equal "Ru", result
   end
+
+  def test_interpolate_get_value_via_exists_hash_key
+    state = RbWasmVdom::ReactiveState.new({}) {} # rubocop:disable Lint/EmptyBlock
+    interpolator = RbWasmVdom::Interpolator.new(state)
+
+    result = interpolator.call(
+      "{{ user[:name] }}",
+      { user: { name: "Ruby" } }
+    )
+
+    assert_equal "Ruby", result
+  end
+
+  def test_interpolate_get_value_via_not_exists_hash_key
+    state = RbWasmVdom::ReactiveState.new({}) {} # rubocop:disable Lint/EmptyBlock
+    interpolator = RbWasmVdom::Interpolator.new(state)
+
+    result = interpolator.call(
+      "{{ user[:unknown] }}",
+      { user: { name: "Ruby" } }
+    )
+
+    assert_equal "", result
+  end
 end
