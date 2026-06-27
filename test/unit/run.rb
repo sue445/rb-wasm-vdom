@@ -31,10 +31,46 @@ class SimpleTestCase
   end
 end
 
-unless Object.const_defined?(:PICORUBY_CONCATENATED_TEST)
-  Dir.glob("./test/unit/*_test.rb").each do |file|
-    require file
+# c.f. https://zenn.dev/tmtms/articles/202605-mysql-params-picoruby
+TOPLEVEL_BINDING = binding unless Object.const_defined?(:TOPLEVEL_BINDING)
+UNIT_TEST_DIR = respond_to?(:require_relative) ? File.dirname(__FILE__) : "/test/unit"
+
+module RequireRelativePatch
+  def require_relative(path)
+    @loaded ||= {}
+    @path ||= [UNIT_TEST_DIR]
+
+    path = "#{path}.rb" unless path.end_with?(".rb")
+    file_path = File.expand_path(path, @path.last)
+
+    return if @loaded[file_path]
+
+    @loaded[file_path] = true
+    @path.push(File.dirname(file_path))
+
+    TOPLEVEL_BINDING.eval(File.read(file_path))
+  ensure
+    @path.pop if @path && @path.length > 1
   end
+end
+
+# require_relative doesn't exist in PicoRuby.wasm
+unless respond_to?(:require_relative)
+  module Kernel
+    prepend RequireRelativePatch
+  end
+end
+
+test_files =
+  if Object.const_defined?(:RB_WASM_VDOM_UNIT_TEST_FILES)
+    RB_WASM_VDOM_UNIT_TEST_FILES
+  else
+    Dir.glob("#{UNIT_TEST_DIR}/*_test.rb")
+  end
+
+test_files.each do |file|
+  filename = File.basename(file)
+  require_relative filename
 end
 
 # Test runner execution logic
@@ -67,4 +103,4 @@ puts "  Failed: #{failure_count}"
 puts "__RB_WASM_VDOM_UNIT_TEST_RESULT__:#{success_count}:#{failure_count}"
 
 # Exit with non-zero code if any test failed
-exit(1) if failure_count.positive?
+exit(1) if failure_count > 0

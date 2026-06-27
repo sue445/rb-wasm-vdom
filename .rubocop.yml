@@ -34,5 +34,9 @@ Naming/MethodParameterName:
 Style/Documentation:
   Enabled: false
 
+Style/NumericPredicate:
+  # NOTE: Numeric#positive? is not available in PicoRuby.wasm
+  Enabled: false
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
