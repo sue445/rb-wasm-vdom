@@ -93,37 +93,23 @@ async function runWithPicoRuby() {
 
   Module.ccall("picorb_init", "number", [], []);
 
-  const libraryCode = await readRubyLibraryForPicoRuby();
-  const testRunnerCode = await readRubyFileForPicoRuby("test/unit/run.rb");
-  const [testFrameworkCode, testExecutionCode] = splitRubyTestRunner(testRunnerCode);
-  const helperFiles = await listRubyFiles("test/unit/helper");
+  await mountRubyFiles(Module, "src");
+  await mountRubyFiles(Module, "test/unit");
+
   const testFiles = await listRubyTestFiles("test/unit");
-  const helperCodes = await Promise.all(
-    helperFiles.map(file => readRubyFileForPicoRuby(file))
-  );
-  const testCodes = await Promise.all(
-    testFiles.map(file => readRubyFileForPicoRuby(file))
-  );
 
-  const runnerCode = [
-    "PICORUBY_CONCATENATED_TEST = true",
-    'puts "PicoRuby runner started"',
-    libraryCode,
-    testFrameworkCode,
-    ...helperCodes,
-    ...testCodes,
-    testExecutionCode
-  ].join("\n\n");
-
-  console.log("PicoRuby helper files:");
-  for (const file of helperFiles) {
-    console.log(`  /${file}`);
-  }
-
-  console.log("PicoRuby test files:");
-  for (const file of testFiles) {
-    console.log(`  /${file}`);
-  }
+  const runnerCode = `
+    begin
+      puts "PicoRuby runner started"
+      RB_WASM_VDOM_UNIT_TEST_FILES = ${JSON.stringify(testFiles.map(file => `/${file}`))}
+      eval(File.read("/test/unit/run.rb"))
+    rescue Exception => e
+      puts "PicoRuby runner failed before test result:"
+      puts "#{e.class}: #{e.message}"
+      puts e.backtrace.join("\\n") if e.respond_to?(:backtrace) && e.backtrace
+      puts "__RB_WASM_VDOM_UNIT_TEST_RESULT__:0:1"
+    end
+  `;
 
   const taskResult = Module.ccall(
     "picorb_create_task",
@@ -141,89 +127,6 @@ async function runWithPicoRuby() {
   if (result.failed > 0) {
     throw new Error(`PicoRuby unit tests failed: ${result.failed} failed.`);
   }
-}
-
-async function readRubyLibraryForPicoRuby() {
-  const libraryFiles = [
-    "src/rb_wasm_vdom/vnode.rb",
-    "src/rb_wasm_vdom/reactive_state.rb",
-    "src/rb_wasm_vdom/interpolator.rb",
-    "src/rb_wasm_vdom/template_parser.rb",
-    "src/rb_wasm_vdom/dom_renderer.rb",
-    "src/rb_wasm_vdom/patcher.rb",
-    "src/rb_wasm_vdom/each_renderer.rb",
-    "src/rb_wasm_vdom/app.rb",
-    "src/rb_wasm_vdom.rb"
-  ];
-
-  const codes = await Promise.all(
-    libraryFiles.map(file => readRubyFileForPicoRuby(file))
-  );
-
-  return codes.join("\n\n");
-}
-
-function splitRubyTestRunner(code) {
-  const marker = "# Test runner execution logic";
-  const markerIndex = code.indexOf(marker);
-
-  if (markerIndex === -1) {
-    throw new Error(`Could not find '${marker}' in test/unit/run.rb`);
-  }
-
-  const frameworkCode = code.slice(0, markerIndex);
-  const executionCode = code.slice(markerIndex);
-
-  return [frameworkCode, executionCode];
-}
-
-async function readRubyFileForPicoRuby(filePath) {
-  const content = await fs.readFile(filePath, "utf-8");
-
-  return content
-    .split("\n")
-    .filter(line => !line.trimStart().startsWith("require_relative "))
-    .join("\n");
-}
-
-async function listRubyTestFiles(directory) {
-  const entries = await fs.readdir(directory, { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    const filePath = path.join(directory, entry.name);
-
-    if (entry.isDirectory()) {
-      files.push(...await listRubyTestFiles(filePath));
-      continue;
-    }
-
-    if (entry.isFile() && filePath.endsWith("_test.rb")) {
-      files.push(filePath);
-    }
-  }
-
-  return files.sort();
-}
-
-async function listRubyFiles(directory) {
-  const entries = await fs.readdir(directory, { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    const filePath = path.join(directory, entry.name);
-
-    if (entry.isDirectory()) {
-      files.push(...await listRubyFiles(filePath));
-      continue;
-    }
-
-    if (entry.isFile() && filePath.endsWith(".rb")) {
-      files.push(filePath);
-    }
-  }
-
-  return files.sort();
 }
 
 async function mountRubyFiles(Module, directory) {
@@ -264,6 +167,26 @@ function createDirectory(Module, directory) {
       // Ignore EEXIST
     }
   }
+}
+
+async function listRubyTestFiles(directory) {
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+  const files = [];
+
+  for (const entry of entries) {
+    const filePath = path.join(directory, entry.name);
+
+    if (entry.isDirectory()) {
+      files.push(...await listRubyTestFiles(filePath));
+      continue;
+    }
+
+    if (entry.isFile() && filePath.endsWith("_test.rb")) {
+      files.push(filePath);
+    }
+  }
+
+  return files.sort();
 }
 
 async function runPicoRubyUntilResult(Module, getResult) {
