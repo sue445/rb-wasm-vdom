@@ -3,8 +3,10 @@
   "version": "0.4.0",
   "description": "A reactive Virtual DOM library for ruby.wasm and Picoruby.wasm",
   "keywords": [
-    "ruby.wasm",
-    "picoruby.wasm"
+    "Ruby",
+    "PicoRuby",
+    "WASM",
+    "vdom"
   ],
   "homepage": "https://github.com/sue445/rb-wasm-vdom",
   "bugs": {
