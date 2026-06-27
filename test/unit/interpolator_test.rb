@@ -2,8 +2,11 @@
 
 require_relative "../../src/rb_wasm_vdom/reactive_state"
 require_relative "../../src/rb_wasm_vdom/interpolator"
+require_relative "helper/js_stub_helper"
 
 class InterpolatorTest < SimpleTestCase
+  include JsStubHelper
+
   def test_interpolate_from_state
     state = RbWasmVdom::ReactiveState.new({ title: "Hello" }) {} # rubocop:disable Lint/EmptyBlock
     interpolator = RbWasmVdom::Interpolator.new(state)
@@ -98,5 +101,34 @@ class InterpolatorTest < SimpleTestCase
     )
 
     assert_equal "", result
+  end
+
+  def test_interpolate_expression_outputs_backtrace_to_console_error_when_error_occurs
+    with_js_global_stub do |console|
+      state = RbWasmVdom::ReactiveState.new({}) {} # rubocop:disable Lint/EmptyBlock
+      interpolator = RbWasmVdom::Interpolator.new(state)
+
+      result = interpolator.call("Value: {{ raise 'interpolation boom' }}")
+
+      assert_equal "Value: {{ raise 'interpolation boom' }}", result
+      assert_equal 1, console.messages.length
+      assert(console.messages[0].include?("interpolation boom"))
+      assert(console.messages[0].include?("interpolate_expression"))
+    end
+  end
+
+  def test_interpolate_expression_outputs_backtrace_not_to_console_error_when_no_error_occurs
+    with_js_global_stub do |console|
+      state = RbWasmVdom::ReactiveState.new({}) {} # rubocop:disable Lint/EmptyBlock
+      interpolator = RbWasmVdom::Interpolator.new(state)
+
+      result = interpolator.call(
+        "Value: {{ name }}",
+        { name: "sue445" }
+      )
+
+      assert_equal "Value: sue445", result
+      assert_equal 0, console.messages.length
+    end
   end
 end

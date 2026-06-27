@@ -96,7 +96,11 @@ async function runWithPicoRuby() {
   const libraryCode = await readRubyLibraryForPicoRuby();
   const testRunnerCode = await readRubyFileForPicoRuby("test/unit/run.rb");
   const [testFrameworkCode, testExecutionCode] = splitRubyTestRunner(testRunnerCode);
+  const helperFiles = await listRubyFiles("test/unit/helper");
   const testFiles = await listRubyTestFiles("test/unit");
+  const helperCodes = await Promise.all(
+    helperFiles.map(file => readRubyFileForPicoRuby(file))
+  );
   const testCodes = await Promise.all(
     testFiles.map(file => readRubyFileForPicoRuby(file))
   );
@@ -106,9 +110,15 @@ async function runWithPicoRuby() {
     'puts "PicoRuby runner started"',
     libraryCode,
     testFrameworkCode,
+    ...helperCodes,
     ...testCodes,
     testExecutionCode
   ].join("\n\n");
+
+  console.log("PicoRuby helper files:");
+  for (const file of helperFiles) {
+    console.log(`  /${file}`);
+  }
 
   console.log("PicoRuby test files:");
   for (const file of testFiles) {
@@ -189,6 +199,26 @@ async function listRubyTestFiles(directory) {
     }
 
     if (entry.isFile() && filePath.endsWith("_test.rb")) {
+      files.push(filePath);
+    }
+  }
+
+  return files.sort();
+}
+
+async function listRubyFiles(directory) {
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+  const files = [];
+
+  for (const entry of entries) {
+    const filePath = path.join(directory, entry.name);
+
+    if (entry.isDirectory()) {
+      files.push(...await listRubyFiles(filePath));
+      continue;
+    }
+
+    if (entry.isFile() && filePath.endsWith(".rb")) {
       files.push(filePath);
     }
   }
