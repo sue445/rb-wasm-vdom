@@ -1,5 +1,12 @@
 ## Unreleased
-[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.3.0...main)
+[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.4.0...main)
+
+## [v0.4.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.4.0)
+
+* **[BREAKING CHANGE]** Remove implicit hash key method access in interpolation
+  * https://github.com/sue445/rb-wasm-vdom/pull/64
+* Output to `console.error` when an error occurs during interpolation
+  * https://github.com/sue445/rb-wasm-vdom/pull/65
 
 ## [v0.3.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.3.0)
 
