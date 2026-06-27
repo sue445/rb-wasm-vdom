@@ -71,8 +71,6 @@ module RbWasmVdom
       return placeholder if expression.empty?
 
       value = EvaluationContext.new(@state, locals).evaluate(expression)
-      return placeholder if value.nil?
-
       value.to_s
     rescue Exception # rubocop:disable Lint/RescueException
       placeholder
@@ -96,9 +94,9 @@ module RbWasmVdom
       # @rbs key: Symbol
       # @rbs return: untyped
       def fetch_value(key)
-        return ValueProxy.wrap(@locals[key]) if @locals.key?(key)
+        return @locals[key] if @locals.key?(key)
 
-        ValueProxy.wrap(@state[key])
+        @state[key]
       end
 
       private
@@ -132,63 +130,6 @@ module RbWasmVdom
       # @rbs return: bool
       def valid_identifier?(key)
         key.to_s.match?(IDENTIFIER_PATTERN)
-      end
-    end
-
-    class ValueProxy
-      # @rbs value: untyped
-      # @rbs return: untyped
-      def self.wrap(value)
-        return value if value.nil? || value == true || value == false
-        return value if value.is_a?(Numeric)
-        return value if value.is_a?(String)
-
-        new(value)
-      end
-
-      # @rbs value: untyped
-      # @rbs return: void
-      def initialize(value)
-        @value = value
-      end
-
-      # @rbs key: Symbol | String | Integer
-      # @rbs return: untyped
-      def [](key)
-        return self.class.wrap(@value[key]) if @value.respond_to?(:[])
-
-        nil
-      end
-
-      # @rbs return: String
-      def to_s
-        @value.to_s
-      end
-
-      private
-
-      # @rbs name: Symbol
-      # @rbs args: Array[untyped]
-      # @rbs return: untyped
-      def method_missing(name, *)
-        return self.class.wrap(@value[name]) if hash_key?(name)
-        return self.class.wrap(@value[name.to_s]) if hash_key?(name.to_s)
-        return self.class.wrap(@value.public_send(name, *)) if @value.respond_to?(name)
-
-        super
-      end
-
-      # @rbs name: Symbol
-      # @rbs include_private: bool
-      # @rbs return: bool
-      def respond_to_missing?(name, include_private = false)
-        hash_key?(name) || hash_key?(name.to_s) || @value.respond_to?(name) || super
-      end
-
-      # @rbs key: Symbol | String
-      # @rbs return: bool
-      def hash_key?(key)
-        @value.respond_to?(:key?) && @value.key?(key)
       end
     end
   end
