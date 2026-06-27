@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JsStubHelper
   def with_js_global_stub
     console = ConsoleErrorSpy.new
