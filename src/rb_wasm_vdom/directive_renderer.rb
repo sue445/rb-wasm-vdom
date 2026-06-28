@@ -15,8 +15,8 @@ module RbWasmVdom
 
       return [] if ast_node.props.key?("#elsif") || ast_node.props.key?("#else")
 
-      if ast_node.props.key?("#if")
-        return [] unless truthy_expression?(ast_node.props["#if"], locals)
+      if ast_node.props.key?("#if") && !truthy_expression?(ast_node.props["#if"], locals)
+        return []
       end
 
       each_expression = ast_node.props["#each"]
