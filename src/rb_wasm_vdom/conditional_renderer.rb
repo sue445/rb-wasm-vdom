@@ -92,8 +92,7 @@ module RbWasmVdom
     def truthy_expression?(expression, locals)
       !!Interpolator::EvaluationContext.new(@state, locals).evaluate(expression)
     rescue Exception => e # rubocop:disable Lint/RescueException
-      backtrace = e.backtrace || []
-      JS.global[:console].error(([e.message] + backtrace).join("\n"))
+      JSConsole.print_error(e)
 
       false
     end
