@@ -73,8 +73,7 @@ module RbWasmVdom
       value = EvaluationContext.new(@state, locals).evaluate(expression)
       value.to_s
     rescue Exception => e # rubocop:disable Lint/RescueException
-      backtrace = e.backtrace || []
-      JS.global[:console].error(([e.message] + backtrace).join("\n"))
+      JSConsole.print_error(e)
 
       placeholder
     end

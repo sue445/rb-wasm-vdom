@@ -9,6 +9,7 @@ import interpolatorRb from "./rb_wasm_vdom/interpolator.rb?raw";
 import conditionalRendererRb from "./rb_wasm_vdom/conditional_renderer.rb?raw";
 import directiveRendererRb from "./rb_wasm_vdom/directive_renderer.rb?raw";
 import appRb from "./rb_wasm_vdom/app.rb?raw";
+import jsConsoleRb from "./rb_wasm_vdom/js_console.rb?raw";
 import mainRb from "./rb_wasm_vdom.rb?raw";
 
 // Concatenate the files in the correct dependency order
@@ -22,6 +23,7 @@ const frameworkRubyCode = [
   conditionalRendererRb,
   directiveRendererRb,
   appRb,
+  jsConsoleRb,
   mainRb
 ].join("\n\n");
 
