@@ -9,4 +9,4 @@ require_relative "../../src/rb_wasm_vdom/interpolator"
 require_relative "../../src/rb_wasm_vdom/directive_renderer"
 require_relative "../../src/rb_wasm_vdom/app"
 
-require_relative "helper/js_stub_helper"
+require_relative "support/js_stub_helper"
