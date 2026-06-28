@@ -1,36 +1,5 @@
 # frozen_string_literal: true
 
-# Simple custom assertion helpers compatible with both ruby.wasm and picoruby.wasm
-module MiniTestMock
-  def assert(condition, message = "Assertion failed")
-    return if condition
-
-    raise "Failure: #{message}"
-  end
-
-  def assert_equal(expected, actual, message = nil)
-    return if expected == actual
-
-    msg = message || "Expected #{expected.inspect}, but got #{actual.inspect}"
-    raise "Failure: #{msg}"
-  end
-end
-
-# Base class for all test cases
-class SimpleTestCase
-  include MiniTestMock
-
-  def self.inherited(subclass)
-    super
-    @subclasses ||= []
-    @subclasses << subclass
-  end
-
-  def self.subclasses
-    @subclasses || []
-  end
-end
-
 # c.f. https://zenn.dev/tmtms/articles/202605-mysql-params-picoruby
 TOPLEVEL_BINDING = binding unless Object.const_defined?(:TOPLEVEL_BINDING)
 UNIT_TEST_DIR = respond_to?(:require_relative) ? File.dirname(__FILE__) : "/test/unit"
@@ -67,6 +36,8 @@ test_files =
   else
     Dir.glob("#{UNIT_TEST_DIR}/*_test.rb")
   end
+
+require_relative "support/simple_test_case"
 
 test_files.each do |file|
   filename = File.basename(file)
