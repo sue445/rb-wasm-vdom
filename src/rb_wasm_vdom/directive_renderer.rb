@@ -5,11 +5,19 @@ module RbWasmVdom
   module DirectiveRenderer
     private
 
+    CONDITIONAL_DIRECTIVES = ["#if", "#elsif", "#else"].freeze
+
     # @rbs ast_node: VNode | String
     # @rbs locals: Hash[Symbol, untyped]
     # @rbs return: Array[VNode | String]
     def build_vdom_nodes(ast_node, locals = {})
       return [@interpolator.call(ast_node, locals)] if ast_node.is_a?(String)
+
+      return [] if ast_node.props.key?("#elsif") || ast_node.props.key?("#else")
+
+      if ast_node.props.key?("#if")
+        return [] unless truthy_expression?(ast_node.props["#if"], locals)
+      end
 
       each_expression = ast_node.props["#each"]
       return build_each_nodes(ast_node, each_expression, locals) if each_expression
@@ -24,6 +32,7 @@ module RbWasmVdom
       new_props = {} #: Hash[String, String]
       ast_node.props.each do |key, value|
         next if key == "#each"
+        next if CONDITIONAL_DIRECTIVES.include?(key)
 
         new_props[key] = @interpolator.call(value, locals)
       end
@@ -37,14 +46,106 @@ module RbWasmVdom
     # @rbs return: Array[VNode | String]
     def build_child_nodes(children, locals)
       new_children = [] #: Array[VNode | String]
+      index = 0
 
-      children.each do |child|
+      while index < children.length
+        child = children[index]
+
+        if conditional_start_node?(child)
+          rendered_nodes, next_index = build_conditional_nodes(children, index, locals)
+          rendered_nodes.each do |new_child|
+            new_children << new_child
+          end
+          index = next_index
+          next
+        end
+
         build_vdom_nodes(child, locals).each do |new_child|
           new_children << new_child
         end
+
+        index += 1
       end
 
       new_children
+    end
+
+    # @rbs child: VNode | String
+    # @rbs return: bool
+    def conditional_start_node?(child)
+      child.is_a?(VNode) && child.props.key?("#if")
+    end
+
+    # @rbs child: VNode | String
+    # @rbs return: bool
+    def conditional_continuation_node?(child)
+      child.is_a?(VNode) && (child.props.key?("#elsif") || child.props.key?("#else"))
+    end
+
+    # @rbs children: Array[VNode | String]
+    # @rbs start_index: Integer
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: [Array[VNode | String], Integer]
+    def build_conditional_nodes(children, start_index, locals)
+      index = start_index
+
+      while index < children.length
+        child = children[index]
+        break unless child.is_a?(VNode)
+
+        if render_conditional_node?(child, locals)
+          return [build_vdom_nodes_without_condition(child, locals), next_conditional_index(children, index + 1)]
+        end
+
+        index += 1
+        break unless index < children.length && conditional_continuation_node?(children[index])
+      end
+
+      [[], index]
+    end
+
+    # @rbs children: Array[VNode | String]
+    # @rbs index: Integer
+    # @rbs return: Integer
+    def next_conditional_index(children, index)
+      index += 1 while index < children.length && conditional_continuation_node?(children[index])
+
+      index
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: bool
+    def render_conditional_node?(ast_node, locals)
+      if ast_node.props.key?("#if")
+        truthy_expression?(ast_node.props["#if"], locals)
+      elsif ast_node.props.key?("#elsif")
+        truthy_expression?(ast_node.props["#elsif"], locals)
+      else
+        ast_node.props.key?("#else")
+      end
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_vdom_nodes_without_condition(ast_node, locals)
+      each_expression = ast_node.props["#each"]
+      return build_each_nodes(ast_node, each_expression, locals) if each_expression
+
+      [build_single_vnode(ast_node, locals)]
+    end
+
+    # @rbs expression: String
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: bool
+    def truthy_expression?(expression, locals)
+      !!Interpolator::EvaluationContext.new(@state, locals).evaluate(expression)
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      backtrace = e.backtrace || []
+      JS.global[:console].error(([e.message] + backtrace).join("\n"))
+
+      false
     end
 
     # @rbs ast_node: VNode
