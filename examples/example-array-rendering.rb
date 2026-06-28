@@ -8,8 +8,13 @@ begin
       <ul>
         <li #each="user in users">Name: {{ user[:name] }}, Age: {{ user[:age] }}</li>
       </ul>
+      <ul>
+        <li #each="js_object in js_array">{{ js_object }}</li>
+      </ul>
     </div>
   HTML
+
+  JS.eval("globalThis.__RbWasmVdomExampleArray = [1, 2, 3]")
 
   state = {
     title: "rb-wasm-vdom Example App (Array Rendering)",
@@ -18,7 +23,8 @@ begin
       { name: "foo", age: 10 },
       { name: "bar", age: 20 },
       { name: "baz", age: 30 },
-    ]
+    ],
+    js_array: JS.global["__RbWasmVdomExampleArray"]
   }
 
   # Initialize and mount the application

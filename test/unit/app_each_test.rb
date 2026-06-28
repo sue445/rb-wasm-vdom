@@ -4,6 +4,7 @@ require_relative "test_helper"
 
 class AppEachTest < SimpleTestCase
   include TestApp
+  include JsStubHelper
 
   def test_build_vdom_expands_array_with_each
     app = build_test_app(items: %w[Ruby Wasm VDOM])
@@ -149,5 +150,53 @@ class AppEachTest < SimpleTestCase
 
     assert_equal "ul", vnode.tag
     assert_equal 0, vnode.children.length
+  end
+
+  def test_build_vdom_expands_js_object_with_each
+    app = build_test_app(items: js_array('["Ruby", "Wasm", "VDOM"]'))
+
+    ast = RbWasmVdom::VNode.new(
+      "ul",
+      {},
+      [
+        RbWasmVdom::VNode.new("li", { "#each" => "item in items" }, ["{{ item }}"])
+      ]
+    )
+
+    vnode = app.send(:build_vdom, ast)
+
+    assert_equal "ul", vnode.tag
+    assert_equal 3, vnode.children.length
+
+    assert_equal "li", vnode.children[0].tag
+    assert_equal({}, vnode.children[0].props)
+    assert_equal ["Ruby"], vnode.children[0].children
+
+    assert_equal "li", vnode.children[1].tag
+    assert_equal({}, vnode.children[1].props)
+    assert_equal ["Wasm"], vnode.children[1].children
+
+    assert_equal "li", vnode.children[2].tag
+    assert_equal({}, vnode.children[2].props)
+    assert_equal ["VDOM"], vnode.children[2].children
+  end
+
+  def test_build_vdom_expands_js_object_with_index
+    app = build_test_app(items: js_array('["Ruby", "Wasm"]'))
+
+    ast = RbWasmVdom::VNode.new(
+      "ol",
+      {},
+      [
+        RbWasmVdom::VNode.new("li", { "#each" => "item, index in items" }, ["{{ index }}: {{ item }}"])
+      ]
+    )
+
+    vnode = app.send(:build_vdom, ast)
+
+    assert_equal "ol", vnode.tag
+    assert_equal 2, vnode.children.length
+    assert_equal ["0: Ruby"], vnode.children[0].children
+    assert_equal ["1: Wasm"], vnode.children[1].children
   end
 end

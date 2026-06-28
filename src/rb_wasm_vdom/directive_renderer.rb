@@ -2,7 +2,7 @@
 # rbs_inline: enabled
 
 module RbWasmVdom
-  module DirectiveRenderer
+  module DirectiveRenderer # rubocop:disable Metrics/ModuleLength
     include ConditionalRenderer
 
     private
@@ -137,17 +137,19 @@ module RbWasmVdom
     # @rbs return: Array[VNode | String]
     def build_collection_nodes(ast_node, collection, first_name, second_name, locals)
       case collection
-      when Array
-        build_array_nodes(ast_node, collection, first_name, second_name, locals)
       when Hash
         build_hash_nodes(ast_node, collection, first_name, second_name, locals)
+      when JS::Object
+        build_js_object_nodes(ast_node, collection, first_name, second_name, locals)
+      when Enumerable
+        build_array_nodes(ast_node, collection, first_name, second_name, locals)
       else
         []
       end
     end
 
     # @rbs ast_node: VNode
-    # @rbs collection: Array[untyped]
+    # @rbs collection: Enumerable[untyped]
     # @rbs item_name: String
     # @rbs index_name: String?
     # @rbs locals: Hash[Symbol, untyped]
@@ -179,6 +181,26 @@ module RbWasmVdom
       collection.each do |key, value|
         item_locals = locals.merge(key_name.to_sym => key)
         item_locals[value_name.to_sym] = value if value_name
+
+        nodes << build_single_vnode(ast_node, item_locals)
+      end
+
+      nodes
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs collection: JS::Object
+    # @rbs item_name: String
+    # @rbs index_name: String?
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_js_object_nodes(ast_node, collection, item_name, index_name, locals)
+      nodes = [] #: Array[VNode | String]
+
+      0.upto(collection[:length].to_i - 1) do |index|
+        item = collection[index]
+        item_locals = locals.merge(item_name.to_sym => item)
+        item_locals[index_name.to_sym] = index if index_name
 
         nodes << build_single_vnode(ast_node, item_locals)
       end
