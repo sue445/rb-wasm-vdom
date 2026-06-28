@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../src/rb_wasm_vdom/vnode"
+require_relative "test_helper"
 
 class TestVNode < SimpleTestCase
   # Test the initialization of a simple VNode without children or props

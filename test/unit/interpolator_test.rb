@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../src/rb_wasm_vdom/reactive_state"
-require_relative "../../src/rb_wasm_vdom/interpolator"
-require_relative "helper/js_stub_helper"
+require_relative "test_helper"
 
 class InterpolatorTest < SimpleTestCase
   include JsStubHelper

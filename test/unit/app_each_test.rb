@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../src/rb_wasm_vdom/vnode"
-require_relative "../../src/rb_wasm_vdom/reactive_state"
-require_relative "../../src/rb_wasm_vdom/interpolator"
-require_relative "../../src/rb_wasm_vdom/dom_renderer"
-require_relative "../../src/rb_wasm_vdom/patcher"
-require_relative "../../src/rb_wasm_vdom/directive_renderer"
-require_relative "../../src/rb_wasm_vdom/app"
+require_relative "test_helper"
 
 class AppEachTest < SimpleTestCase
   def test_build_vdom_expands_array_with_each
