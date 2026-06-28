@@ -3,9 +3,9 @@
 
 module RbWasmVdom
   module DirectiveRenderer
-    private
-
     CONDITIONAL_DIRECTIVES = ["#if", "#elsif", "#else"].freeze
+
+    private
 
     # @rbs ast_node: VNode | String
     # @rbs locals: Hash[Symbol, untyped]
