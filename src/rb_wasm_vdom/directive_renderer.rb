@@ -3,6 +3,8 @@
 
 module RbWasmVdom
   module DirectiveRenderer
+    include ConditionalRenderer
+
     private
 
     # @rbs ast_node: VNode | String
@@ -10,11 +12,9 @@ module RbWasmVdom
     # @rbs return: Array[VNode | String]
     def build_vdom_nodes(ast_node, locals = {})
       return [@interpolator.call(ast_node, locals)] if ast_node.is_a?(String)
+      return [] unless conditional_node_renderable?(ast_node, locals)
 
-      each_expression = ast_node.props["#each"]
-      return build_each_nodes(ast_node, each_expression, locals) if each_expression
-
-      [build_single_vnode(ast_node, locals)]
+      build_vdom_nodes_without_condition(ast_node, locals)
     end
 
     # @rbs ast_node: VNode
@@ -24,6 +24,7 @@ module RbWasmVdom
       new_props = {} #: Hash[String, String]
       ast_node.props.each do |key, value|
         next if key == "#each"
+        next if CONDITIONAL_DIRECTIVES.include?(key)
 
         new_props[key] = @interpolator.call(value, locals)
       end
@@ -37,14 +38,47 @@ module RbWasmVdom
     # @rbs return: Array[VNode | String]
     def build_child_nodes(children, locals)
       new_children = [] #: Array[VNode | String]
+      index = 0
 
-      children.each do |child|
-        build_vdom_nodes(child, locals).each do |new_child|
-          new_children << new_child
-        end
+      while index < children.length
+        rendered_nodes, index = build_child_nodes_at(children, index, locals)
+        new_children.concat(rendered_nodes)
       end
 
       new_children
+    end
+
+    # @rbs children: Array[VNode | String]
+    # @rbs index: Integer
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: [Array[VNode | String], Integer]
+    def build_child_nodes_at(children, index, locals)
+      child = children[index]
+
+      return build_conditional_child_nodes(children, index, locals) if conditional_start_node?(child)
+
+      [build_vdom_nodes(child, locals), index + 1]
+    end
+
+    # @rbs children: Array[VNode | String]
+    # @rbs index: Integer
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: [Array[VNode | String], Integer]
+    def build_conditional_child_nodes(children, index, locals)
+      conditional_node, next_index = find_conditional_node(children, index, locals)
+      return [[], next_index] unless conditional_node
+
+      [build_vdom_nodes_without_condition(conditional_node, locals), next_index]
+    end
+
+    # @rbs ast_node: VNode
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: Array[VNode | String]
+    def build_vdom_nodes_without_condition(ast_node, locals)
+      each_expression = ast_node.props["#each"]
+      return build_each_nodes(ast_node, each_expression, locals) if each_expression
+
+      [build_single_vnode(ast_node, locals)]
     end
 
     # @rbs ast_node: VNode

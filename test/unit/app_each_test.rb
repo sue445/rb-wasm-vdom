@@ -3,6 +3,8 @@
 require_relative "test_helper"
 
 class AppEachTest < SimpleTestCase
+  include TestApp
+
   def test_build_vdom_expands_array_with_each
     app = build_test_app(items: %w[Ruby Wasm VDOM])
 
@@ -147,18 +149,5 @@ class AppEachTest < SimpleTestCase
 
     assert_equal "ul", vnode.tag
     assert_equal 0, vnode.children.length
-  end
-
-  private
-
-  def build_test_app(initial_state)
-    app = RbWasmVdom::App.allocate
-
-    state = RbWasmVdom::ReactiveState.new(initial_state) {} # rubocop:disable Lint/EmptyBlock
-
-    app.instance_variable_set(:@state, state)
-    app.instance_variable_set(:@interpolator, RbWasmVdom::Interpolator.new(state))
-
-    app
   end
 end

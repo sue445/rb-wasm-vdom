@@ -50,6 +50,7 @@ A template can contain:
 * Text nodes
 * Attributes
 * [State interpolation](#state-interpolation) with `{{ key }}`
+* [Conditional Rendering](#conditional-rendering) with `#if`, `#elsif`, and `#else`
 * [List Rendering](#list-rendering) with `#each="item in items"` (`Array`), `#each="item, index in items"` (`Array`) or `#each="key, value in hash"` (`Hash`)
 * [Event bindings](#event-binding) with `@event="method_name"`
 
@@ -150,6 +151,96 @@ If an expression cannot be resolved or a method call raises an error, the origin
 ```
 
 Because interpolation evaluates Ruby expressions, use templates you trust.
+
+## Conditional Rendering
+
+Use `#if`, `#elsif`, and `#else` to render elements conditionally.
+
+These directives evaluate Ruby expressions using the current state. The first element whose condition is truthy is rendered, and the remaining branches in the same conditional chain are skipped.
+
+```ruby
+template = <<~HTML
+  <div>
+    <p #if="count > 0">positive: {{ count }}</p>
+    <p #elsif="count < 0">negative: {{ count }}</p>
+    <p #else>zero</p>
+  </div>
+HTML
+
+state = {
+  count: 0
+}
+
+RbWasmVdom.create_app("#app", template: template, state: state)
+```
+
+When `count` is `0`, this renders:
+
+```html
+<div>
+  <p>zero</p>
+</div>
+```
+
+When `count` is greater than `0`, this renders the `#if` branch:
+
+```html
+<div>
+  <p>positive: 1</p>
+</div>
+```
+
+When `count` is less than `0`, this renders the `#elsif` branch:
+
+```html
+<div>
+  <p>negative: -1</p>
+</div>
+```
+
+`#elsif` and `#else` must immediately follow a `#if` or another `#elsif` branch as sibling elements.
+
+```html
+<p #if="logged_in">Welcome back!</p>
+<p #else>Please sign in.</p>
+```
+
+You can also use `#if` without `#elsif` or `#else`. If the condition is false, no element is rendered.
+
+```html
+<p #if="visible">This text is visible.</p>
+```
+
+Conditional directives are used only for rendering and are not added to the final DOM element.
+
+```html
+<p #if="visible">Shown</p>
+```
+
+If `visible` is truthy, this renders as:
+
+```html
+<p>Shown</p>
+```
+
+`#if` can be combined with `#each`.
+
+```ruby
+template = <<~HTML
+  <ul>
+    <li #if="visible" #each="item in items">{{ item }}</li>
+  </ul>
+HTML
+
+state = {
+  visible: true,
+  items: ["Ruby", "Wasm", "VDOM"]
+}
+```
+
+If `visible` is truthy, this renders one `<li>` element for each item. If `visible` is falsey, no list items are rendered.
+
+Because conditional expressions are evaluated as Ruby expressions, use templates you trust.
 
 ## List Rendering
 
