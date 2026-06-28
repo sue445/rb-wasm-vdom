@@ -5,7 +5,7 @@ module RbWasmVdom
   # Framework Core
   class App
     include Patcher
-    include EachRenderer
+    include DirectiveRenderer
 
     # @rbs selector: String
     # @rbs template: String

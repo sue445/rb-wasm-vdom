@@ -2,7 +2,7 @@
 # rbs_inline: enabled
 
 module RbWasmVdom
-  module EachRenderer
+  module DirectiveRenderer
     private
 
     # @rbs ast_node: VNode | String

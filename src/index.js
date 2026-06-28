@@ -6,7 +6,7 @@ import templateParserRb from "./rb_wasm_vdom/template_parser.rb?raw";
 import domRendererRb from "./rb_wasm_vdom/dom_renderer.rb?raw";
 import patcherRb from "./rb_wasm_vdom/patcher.rb?raw";
 import interpolatorRb from "./rb_wasm_vdom/interpolator.rb?raw";
-import eachRendererRb from "./rb_wasm_vdom/each_renderer.rb?raw";
+import eachRendererRb from "./rb_wasm_vdom/directive_renderer.rb?raw";
 import appRb from "./rb_wasm_vdom/app.rb?raw";
 import mainRb from "./rb_wasm_vdom.rb?raw";
 
