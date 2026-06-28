@@ -62,7 +62,7 @@ async function runWithRubyWasmHead() {
 
   // Execute the custom test runner script
   vm.eval(`
-    require "./test/unit/run.rb"
+    require "./test/unit/test_runner.rb"
   `);
 }
 
@@ -102,7 +102,7 @@ async function runWithPicoRuby() {
     begin
       puts "PicoRuby runner started"
       RB_WASM_VDOM_UNIT_TEST_FILES = ${JSON.stringify(testFiles.map(file => `/${file}`))}
-      eval(File.read("/test/unit/run.rb"))
+      eval(File.read("/test/unit/test_runner.rb"))
     rescue Exception => e
       puts "PicoRuby runner failed before test result:"
       puts "#{e.class}: #{e.message}"
