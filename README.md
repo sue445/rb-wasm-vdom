@@ -73,6 +73,7 @@ or specific version
 | Array with Index Rendering   | [example-array-with-index-rendering.rb](examples/example-array-with-index-rendering.rb)  | [See](https://sue445.github.io/rb-wasm-vdom/example-array-with-index-rendering-ruby-wasm.html)   | [See](https://sue445.github.io/rb-wasm-vdom/example-array-with-index-rendering-picoruby-wasm.html)   |
 | Hash Rendering               | [example-hash-rendering.rb](examples/example-hash-rendering.rb)                          | [See](https://sue445.github.io/rb-wasm-vdom/example-hash-rendering-ruby-wasm.html)               | [See](https://sue445.github.io/rb-wasm-vdom/example-hash-rendering-picoruby-wasm.html)               |
 | Call methods in interpolator | [example-call-methods-in-interpolator](examples/example-call-methods-in-interpolator.rb) | [See](https://sue445.github.io/rb-wasm-vdom/example-call-methods-in-interpolator-ruby-wasm.html) | [See](https://sue445.github.io/rb-wasm-vdom/example-call-methods-in-interpolator-picoruby-wasm.html) |
+| Conditional Rendering        | [example-conditional-rendering](examples/example-conditional-rendering.rb)               | [See](https://sue445.github.io/rb-wasm-vdom/example-conditional-rendering-ruby-wasm.html)        | [See](https://sue445.github.io/rb-wasm-vdom/example-conditional-rendering-picoruby-wasm.html)        |
 
 ## Usage
 For detailed usage, see [USAGE.md](USAGE.md).
