@@ -32,6 +32,7 @@ const files = [
   'src/rb_wasm_vdom/conditional_renderer.rb',
   'src/rb_wasm_vdom/directive_renderer.rb',
   'src/rb_wasm_vdom/app.rb',
+  'src/rb_wasm_vdom/js_console.rb',
   'src/rb_wasm_vdom.rb'
 ];
 
