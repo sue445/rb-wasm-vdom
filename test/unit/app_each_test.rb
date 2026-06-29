@@ -199,4 +199,71 @@ class AppEachTest < SimpleTestCase
     assert_equal ["0: Ruby"], vnode.children[0].children
     assert_equal ["1: Wasm"], vnode.children[1].children
   end
+
+  def test_build_vdom_expands_nested_collection_with_each
+    app = build_test_app(
+      users: [
+        { name: "foo", languages: %w[Ruby Go] },
+        { name: "bar", languages: %w[TypeScript] }
+      ]
+    )
+
+    ast = RbWasmVdom::VNode.new(
+      "div",
+      {},
+      [
+        RbWasmVdom::VNode.new(
+          "section",
+          { "#each" => "user in users" },
+          [
+            RbWasmVdom::VNode.new("h3", {}, ["{{ user[:name] }}"]),
+            RbWasmVdom::VNode.new(
+              "ul",
+              {},
+              [
+                RbWasmVdom::VNode.new("li", { "#each" => "language in user[:languages]" }, ["{{ language }}"])
+              ]
+            )
+          ]
+        )
+      ]
+    )
+
+    vnode = app.send(:build_vdom, ast)
+
+    assert_equal "div", vnode.tag
+    assert_equal 2, vnode.children.length
+
+    first_user = vnode.children[0]
+    assert_equal "section", first_user.tag
+    assert_equal ["foo"], first_user.children[0].children
+    assert_equal 2, first_user.children[1].children.length
+    assert_equal ["Ruby"], first_user.children[1].children[0].children
+    assert_equal ["Go"], first_user.children[1].children[1].children
+
+    second_user = vnode.children[1]
+    assert_equal "section", second_user.tag
+    assert_equal ["bar"], second_user.children[0].children
+    assert_equal 1, second_user.children[1].children.length
+    assert_equal ["TypeScript"], second_user.children[1].children[0].children
+  end
+
+  def test_build_vdom_expands_state_nested_collection_with_each
+    app = build_test_app(user: { languages: %w[Ruby Go] })
+
+    ast = RbWasmVdom::VNode.new(
+      "ul",
+      {},
+      [
+        RbWasmVdom::VNode.new("li", { "#each" => "language in user[:languages]" }, ["{{ language }}"])
+      ]
+    )
+
+    vnode = app.send(:build_vdom, ast)
+
+    assert_equal "ul", vnode.tag
+    assert_equal 2, vnode.children.length
+    assert_equal ["Ruby"], vnode.children[0].children
+    assert_equal ["Go"], vnode.children[1].children
+  end
 end

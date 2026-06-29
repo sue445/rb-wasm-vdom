@@ -5,9 +5,18 @@ begin
       <ul>
         <li #each="item in items">{{ item }}</li>
       </ul>
-      <ul>
-        <li #each="user in users">Name: {{ user[:name] }}, Age: {{ user[:age] }}</li>
-      </ul>
+      <dl #each="user in users">
+        <dt>Name</dt>
+        <dd>{{ user[:name] }}</dd>
+        <dt>Age</dt>
+        <dd>{{ user[:age] }}</dd>
+        <dt>Languages</dt>
+        <dd>
+          <ul>
+            <li #each="language in user[:languages]">{{ language }}</li>
+          </ul>
+        </dd>
+      </dl>
       <ul>
         <li #each="js_object in js_array">{{ js_object }}</li>
       </ul>
@@ -20,9 +29,9 @@ begin
     title: "rb-wasm-vdom Example App (Array Rendering)",
     items: ["Buy milk", "Write Ruby", "Ship wasm app"],
     users: [
-      { name: "foo", age: 10 },
-      { name: "bar", age: 20 },
-      { name: "baz", age: 30 },
+      { name: "foo", age: 10, languages: ["Ruby", "Go"] },
+      { name: "bar", age: 20, languages: ["TypeScript"] },
+      { name: "baz", age: 30, languages: ["Rust"] },
     ],
     js_array: JS.global["__RbWasmVdomExampleArray"]
   }
