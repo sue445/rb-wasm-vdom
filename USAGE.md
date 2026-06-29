@@ -51,7 +51,10 @@ A template can contain:
 * Attributes
 * [State interpolation](#state-interpolation) with `{{ key }}`
 * [Conditional Rendering](#conditional-rendering) with `#if`, `#elsif`, and `#else`
-* [List Rendering](#list-rendering) with `#each="item in items"` (`Array`), `#each="item, index in items"` (`Array`) or `#each="key, value in hash"` (`Hash`)
+* [List Rendering](#list-rendering)
+  * `#each="item in items"` (`Array`, `JS::Object`)
+  * `#each="item, index in items"` (`Array`, `JS::Object`)
+  * `#each="key, value in hash"` (`Hash`)
 * [Event bindings](#event-binding) with `@event="method_name"`
 
 Example:

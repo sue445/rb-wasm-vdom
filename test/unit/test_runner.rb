@@ -4,6 +4,8 @@
 TOPLEVEL_BINDING = binding unless Object.const_defined?(:TOPLEVEL_BINDING)
 UNIT_TEST_DIR = respond_to?(:require_relative) ? File.dirname(__FILE__) : "/test/unit"
 
+require "js"
+
 module RequireRelativePatch
   def require_relative(path)
     @loaded ||= {}
