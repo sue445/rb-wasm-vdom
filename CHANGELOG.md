@@ -1,5 +1,15 @@
 ## Unreleased
-[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.5.0...main)
+[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.6.0...main)
+
+## [v0.6.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.6.0)
+[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.5.0...v0.6.0)
+
+* Impl `RbWasmVdom::JSConsole.print_error`
+  * https://github.com/sue445/rb-wasm-vdom/pull/75
+* Support `JS::Object` in List Rendering
+  * https://github.com/sue445/rb-wasm-vdom/pull/76
+* Support local variables in List Rendering
+  * https://github.com/sue445/rb-wasm-vdom/pull/77
 
 ## [v0.5.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.5.0)
 [full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.4.0...v0.5.0)
