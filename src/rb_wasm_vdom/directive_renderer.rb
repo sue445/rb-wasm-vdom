@@ -89,10 +89,21 @@ module RbWasmVdom
       parsed = parse_each_expression(expression)
       return [build_single_vnode(ast_node, locals)] unless parsed
 
-      first_name, second_name, collection_name = parsed
-      collection = @state[collection_name.to_sym]
+      first_name, second_name, collection_expression = parsed
+      collection = evaluate_each_collection(collection_expression, locals)
 
       build_collection_nodes(ast_node, collection, first_name, second_name, locals)
+    end
+
+    # @rbs expression: String
+    # @rbs locals: Hash[Symbol, untyped]
+    # @rbs return: untyped
+    def evaluate_each_collection(expression, locals)
+      Interpolator::EvaluationContext.new(@state, locals).evaluate(expression)
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      JSConsole.print_error(e)
+
+      nil
     end
 
     # @rbs expression: String
@@ -105,28 +116,28 @@ module RbWasmVdom
     # @rbs expression: String
     # @rbs return: [String, nil, String]?
     def parse_each_single_value_expression(expression)
-      match = expression.match(/^\s*(\w+)\s+in\s+(\w+)\s*$/)
+      match = expression.match(/^\s*(\w+)\s+in\s+(.+?)\s*$/)
       return nil unless match
 
       value_name = match[1]
-      collection_name = match[2]
-      return nil unless value_name && collection_name
+      collection_expression = match[2]
+      return nil unless value_name && collection_expression
 
-      [value_name, nil, collection_name]
+      [value_name, nil, collection_expression]
     end
 
     # @rbs expression: String
     # @rbs return: [String, String, String]?
     def parse_each_pair_expression(expression)
-      match = expression.match(/^\s*(\w+)\s*,\s*(\w+)\s+in\s+(\w+)\s*$/)
+      match = expression.match(/^\s*(\w+)\s*,\s*(\w+)\s+in\s+(.+?)\s*$/)
       return nil unless match
 
       first_name = match[1]
       second_name = match[2]
-      collection_name = match[3]
-      return nil unless first_name && second_name && collection_name
+      collection_expression = match[3]
+      return nil unless first_name && second_name && collection_expression
 
-      [first_name, second_name, collection_name]
+      [first_name, second_name, collection_expression]
     end
 
     # @rbs ast_node: VNode
