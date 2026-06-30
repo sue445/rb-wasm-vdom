@@ -1,7 +1,7 @@
 {
   "name": "@sue445/rb-wasm-vdom",
   "version": "0.6.0",
-  "description": "A reactive Virtual DOM library for ruby.wasm and Picoruby.wasm",
+  "description": "A reactive Virtual DOM library for ruby.wasm and PicoRuby.wasm",
   "keywords": [
     "Ruby",
     "PicoRuby",

@@ -1,5 +1,5 @@
 # rb-wasm-vdom
-A reactive Virtual DOM library for [ruby.wasm](https://github.com/ruby/ruby.wasm) and [Picoruby.wasm](https://www.npmjs.com/package/@picoruby/wasm-wasi)
+A reactive Virtual DOM library for [ruby.wasm](https://github.com/ruby/ruby.wasm) and [PicoRuby.wasm](https://www.npmjs.com/package/@picoruby/wasm-wasi)
 
 [![NPM Version](https://img.shields.io/npm/v/%40sue445%2Frb-wasm-vdom)](https://www.npmjs.com/package/@sue445/rb-wasm-vdom)
 [![](https://data.jsdelivr.com/v1/package/npm/@sue445/rb-wasm-vdom/badge)](https://www.jsdelivr.com/package/npm/@sue445/rb-wasm-vdom)
@@ -11,7 +11,7 @@ A reactive Virtual DOM library for [ruby.wasm](https://github.com/ruby/ruby.wasm
 <script src="https://cdn.jsdelivr.net/npm/@ruby/head-wasm-wasi/dist/browser.script.iife.min.js"></script>
 
 <!--
-or using Picoruby.wasm
+or using PicoRuby.wasm
 <script src="https://cdn.jsdelivr.net/npm/@picoruby/wasm-wasi@latest/dist/init.iife.js"></script>
 -->
 
@@ -66,7 +66,7 @@ or specific version
 
 ## Examples
 
-| Name                         | Source                                                                                      | Browse on ruby.wasm                                                                              | Browse on Picoruby.wasm                                                                              |
+| Name                         | Source                                                                                      | Browse on ruby.wasm                                                                              | Browse on PicoRuby.wasm                                                                              |
 |------------------------------|---------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
 | Reactivity App               | [example-reactivity.rb](examples/example-reactivity.rb)                                     | [See](https://sue445.github.io/rb-wasm-vdom/example-reactivity-ruby-wasm.html)                   | [See](https://sue445.github.io/rb-wasm-vdom/example-reactivity-picoruby-wasm.html)                   |
 | Array Rendering              | [example-array-rendering.rb](examples/example-array-rendering.rb)                           | [See](https://sue445.github.io/rb-wasm-vdom/example-array-rendering-ruby-wasm.html)              | [See](https://sue445.github.io/rb-wasm-vdom/example-array-rendering-picoruby-wasm.html)              |
