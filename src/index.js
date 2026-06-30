@@ -32,7 +32,7 @@ let isInitialized = false;
 
 /**
  * Mounts the application to the Virtual DOM.
- * * @param {Object} vm - The initialized Ruby VM instance (ruby.wasm or picoruby.wasm)
+ * * @param {Object} vm - The initialized Ruby VM instance (ruby.wasm or PicoRuby.wasm)
  * @param {Object} options - Configuration object containing el, template, state, and methods
  */
 export function createApp(vm, { el, template, state, methods }) {
