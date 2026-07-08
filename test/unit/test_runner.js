@@ -8,20 +8,23 @@ async function main() {
 
   console.log(`🚀 Running tests with VM: ${vmType}`);
 
-  switch (vmType) {
-    case "picoruby-wasm-wasi-latest":
-      await runWithPicoRuby();
-      break;
-    case "ruby-wasm-head":
-    default:
-      await runWithRubyWasmHead();
-      break;
+  const rubyWasmMatch = vmType.match(/^ruby-wasm-(head|\d+\.\d+)$/);
+
+  if (vmType === "picoruby-wasm-wasi-latest") {
+    await runWithPicoRuby();
+
+  } else if (rubyWasmMatch) {
+    const version = rubyWasmMatch[1];
+    await runWithRubyWasm(version);
+
+  } else {
+    throw new Error(`Unsupported arg: ${vmType}`);
   }
 }
 
-async function runWithRubyWasmHead() {
+async function runWithRubyWasm(version) {
   const jsPkgName = "@ruby/wasm-wasi";
-  const wasmPath = "node_modules/@ruby/head-wasm-wasi/dist/ruby.wasm";
+  const wasmPath = `node_modules/@ruby/${version}-wasm-wasi/dist/ruby.wasm`;
 
   // Dynamically import the wrapper module and extract RubyVM
   const jsModule = await import(jsPkgName);
