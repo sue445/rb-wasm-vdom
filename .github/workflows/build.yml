@@ -15,6 +15,10 @@ jobs:
     strategy:
       matrix:
         test_task:
+          - ruby-wasm-3.2
+          - ruby-wasm-3.3
+          - ruby-wasm-3.4
+          - ruby-wasm-4.0
           - ruby-wasm-head
           - picoruby-wasm-wasi-latest
 
