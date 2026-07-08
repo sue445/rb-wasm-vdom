@@ -2,7 +2,7 @@
 
 require_relative "test_helper"
 
-class TestVNode < SimpleTestCase
+class VNodeTest < SimpleTestCase
   # Test the initialization of a simple VNode without children or props
   def test_initialize_basic
     vnode = RbWasmVdom::VNode.new("div")
