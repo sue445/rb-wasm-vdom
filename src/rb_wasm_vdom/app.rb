@@ -36,6 +36,8 @@ module RbWasmVdom
       if @current_vnode.nil?
         @el[:innerHTML] = ""
         @el.appendChild(create_element(new_vnode))
+      elsif @current_vnode.is_a?(VFragment) && new_vnode.is_a?(VFragment)
+        patch_fragment(@el, @current_vnode, new_vnode)
       else
         patch(@el, @current_vnode, new_vnode, 0)
       end
@@ -43,8 +45,8 @@ module RbWasmVdom
       @current_vnode = new_vnode
     end
 
-    # @rbs ast_node: VNode | String
-    # @rbs return: VNode | String
+    # @rbs ast_node: VNode | VFragment | String
+    # @rbs return: VNode | VFragment | String
     def build_vdom(ast_node)
       build_vdom_nodes(ast_node).first
     end

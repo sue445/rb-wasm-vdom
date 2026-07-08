@@ -1,5 +1,6 @@
 // Import all Ruby files as raw strings
 // The '?raw' suffix tells Vite to load the file contents as a string instead of executing it.
+import vfragmentRb from "./rb_wasm_vdom/vfragment.rb?raw";
 import vnodeRb from "./rb_wasm_vdom/vnode.rb?raw";
 import reactiveStateRb from "./rb_wasm_vdom/reactive_state.rb?raw";
 import templateParserRb from "./rb_wasm_vdom/template_parser.rb?raw";
@@ -14,6 +15,7 @@ import mainRb from "./rb_wasm_vdom.rb?raw";
 
 // Concatenate the files in the correct dependency order
 const frameworkRubyCode = [
+  vfragmentRb,
   vnodeRb,
   reactiveStateRb,
   templateParserRb,

@@ -23,6 +23,7 @@ const stripMagicComments = code => {
 
 // Specify the files to bundle in dependency order
 const files = [
+  'src/rb_wasm_vdom/vfragment.rb',
   'src/rb_wasm_vdom/vnode.rb',
   'src/rb_wasm_vdom/reactive_state.rb',
   'src/rb_wasm_vdom/template_parser.rb',

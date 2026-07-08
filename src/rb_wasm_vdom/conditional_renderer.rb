@@ -17,19 +17,19 @@ module RbWasmVdom
       truthy_expression?(ast_node.props["#if"], locals)
     end
 
-    # @rbs child: VNode | String
+    # @rbs child: VNode | VFragment | String
     # @rbs return: bool
     def conditional_start_node?(child)
       child.is_a?(VNode) && child.props.key?("#if")
     end
 
-    # @rbs child: VNode | String
+    # @rbs child: VNode | VFragment | String
     # @rbs return: bool
     def conditional_continuation_node?(child)
       child.is_a?(VNode) && (child.props.key?("#elsif") || child.props.key?("#else"))
     end
 
-    # @rbs children: Array[VNode | String]
+    # @rbs children: Array[VNode | VFragment | String]
     # @rbs start_index: Integer
     # @rbs locals: Hash[Symbol, untyped]
     # @rbs return: [VNode?, Integer]
@@ -45,7 +45,7 @@ module RbWasmVdom
       [child, next_index]
     end
 
-    # @rbs children: Array[VNode | String]
+    # @rbs children: Array[VNode | VFragment | String]
     # @rbs start_index: Integer
     # @rbs locals: Hash[Symbol, untyped]
     # @rbs return: Integer?
@@ -64,7 +64,7 @@ module RbWasmVdom
       nil
     end
 
-    # @rbs children: Array[VNode | String]
+    # @rbs children: Array[VNode | VFragment | String]
     # @rbs index: Integer
     # @rbs return: Integer
     def next_conditional_index(children, index)

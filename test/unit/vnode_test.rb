@@ -23,4 +23,15 @@ class VNodeTest < SimpleTestCase
     assert_equal props, vnode.props
     assert_equal children, vnode.children
   end
+
+  def test_initialize_fragment_with_children
+    children = [
+      RbWasmVdom::VNode.new("h1", {}, ["Title"]),
+      RbWasmVdom::VNode.new("p", {}, ["Body"])
+    ]
+
+    fragment = RbWasmVdom::VFragment.new(children)
+
+    assert_equal children, fragment.children
+  end
 end

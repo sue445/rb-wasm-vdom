@@ -75,6 +75,7 @@ or specific version
 | Call methods in interpolator | [example-call-methods-in-interpolator.rb](examples/example-call-methods-in-interpolator.rb) | [See](https://sue445.github.io/rb-wasm-vdom/example-call-methods-in-interpolator-ruby-wasm.html) | [See](https://sue445.github.io/rb-wasm-vdom/example-call-methods-in-interpolator-picoruby-wasm.html) |
 | Conditional Rendering        | [example-conditional-rendering.rb](examples/example-conditional-rendering.rb)               | [See](https://sue445.github.io/rb-wasm-vdom/example-conditional-rendering-ruby-wasm.html)        | [See](https://sue445.github.io/rb-wasm-vdom/example-conditional-rendering-picoruby-wasm.html)        |
 | Tic-Tac-Toe                  | [example-tic-tac-toe.rb](examples/example-tic-tac-toe.rb)                                   | [See](https://sue445.github.io/rb-wasm-vdom/example-tic-tac-toe-ruby-wasm.html)                  | [See](https://sue445.github.io/rb-wasm-vdom/example-tic-tac-toe-picoruby-wasm.html)                  |
+| Multiple root                | [example-multiple-root.rb](examples/example-multiple-root.rb)                               | [See](https://sue445.github.io/rb-wasm-vdom/example-multiple-root-ruby-wasm.html)                | [See](https://sue445.github.io/rb-wasm-vdom/example-multiple-root-picoruby-wasm.html)                |
 
 ## Usage
 For detailed usage, see [USAGE.md](USAGE.md).
