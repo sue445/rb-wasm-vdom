@@ -45,3 +45,7 @@ updates:
       - sue445
     cooldown:
       default-days: 7
+    groups:
+      ruby-wasm-wasi:
+        patterns:
+          - "@ruby/*-wasm-wasi"

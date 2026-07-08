@@ -36,13 +36,21 @@
     "test": "npm run test:unit && npm run test:integration && npm run test:build",
     "test:build": "node --test 'test/build/*.test.js'",
     "test:integration": "npm run build && playwright test test/integration/",
-    "test:unit": "npm run test:unit:ruby-wasm-head && npm run test:unit:picoruby-wasm-wasi-latest",
+    "test:unit": "npm run test:unit:ruby-wasm-head && npm run test:unit:ruby-wasm-3.2 && npm run test:unit:ruby-wasm-3.3 && npm run test:unit:ruby-wasm-3.4 && npm run test:unit:ruby-wasm-4.0 && npm run test:unit:picoruby-wasm-wasi-latest",
     "test:unit:picoruby-wasm-wasi-latest": "node test/unit/test_runner.js picoruby-wasm-wasi-latest",
+    "test:unit:ruby-wasm-3.2": "node test/unit/test_runner.js ruby-wasm-3.2",
+    "test:unit:ruby-wasm-3.3": "node test/unit/test_runner.js ruby-wasm-3.3",
+    "test:unit:ruby-wasm-3.4": "node test/unit/test_runner.js ruby-wasm-3.4",
+    "test:unit:ruby-wasm-4.0": "node test/unit/test_runner.js ruby-wasm-4.0",
     "test:unit:ruby-wasm-head": "node test/unit/test_runner.js ruby-wasm-head"
   },
   "devDependencies": {
     "@picoruby/wasm-wasi": "^4.0.0",
     "@playwright/test": "^1.61.1",
+    "@ruby/3.2-wasm-wasi": "^2.9.3-2.9.4",
+    "@ruby/3.3-wasm-wasi": "^2.9.3-2.9.4",
+    "@ruby/3.4-wasm-wasi": "^2.9.3-2.9.4",
+    "@ruby/4.0-wasm-wasi": "^2.9.3-2.9.4",
     "@ruby/head-wasm-wasi": "^2.9.3-2.9.4",
     "vite": "^8.1.2"
   },
