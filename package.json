@@ -46,6 +46,7 @@
     "@ruby/3.2-wasm-wasi": "^2.9.3-2.9.4",
     "@ruby/3.3-wasm-wasi": "^2.9.3-2.9.4",
     "@ruby/3.4-wasm-wasi": "^2.9.3-2.9.4",
+    "@ruby/4.0-wasm-wasi": "^2.9.3-2.9.4",
     "@ruby/head-wasm-wasi": "^2.9.3-2.9.4",
     "vite": "^8.1.2"
   },
