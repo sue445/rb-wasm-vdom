@@ -10,7 +10,7 @@ async function main() {
 
   const rubyWasmMatch = vmType.match(/^ruby-wasm-(head|\d+\.\d+)$/);
 
-  if (vmType === "picoruby-wasm-wasi-latest") {
+  if (vmType === "picoruby-wasm-latest") {
     await runWithPicoRuby();
 
   } else if (rubyWasmMatch) {

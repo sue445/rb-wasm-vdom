@@ -20,7 +20,7 @@ jobs:
           - ruby-wasm-3.4
           - ruby-wasm-4.0
           - ruby-wasm-head
-          - picoruby-wasm-wasi-latest
+          - picoruby-wasm-latest
 
     env:
       TEST_TASK: ${{ matrix.test_task }}
