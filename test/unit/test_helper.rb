@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "../../src/rb_wasm_vdom/vfragment"
 require_relative "../../src/rb_wasm_vdom/vnode"
 require_relative "../../src/rb_wasm_vdom/reactive_state"
 require_relative "../../src/rb_wasm_vdom/template_parser"

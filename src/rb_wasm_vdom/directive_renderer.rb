@@ -7,11 +7,14 @@ module RbWasmVdom
 
     private
 
-    # @rbs ast_node: VNode | String
+    # @rbs ast_node: VNode | VFragment | String
     # @rbs locals: Hash[Symbol, untyped]
-    # @rbs return: Array[VNode | String]
+    # @rbs return: Array[VNode | VFragment | String]
     def build_vdom_nodes(ast_node, locals = {})
       return [@interpolator.call(ast_node, locals)] if ast_node.is_a?(String)
+
+      return [VFragment.new(build_child_nodes(ast_node.children, locals))] if ast_node.is_a?(VFragment)
+
       return [] unless conditional_node_renderable?(ast_node, locals)
 
       build_vdom_nodes_without_condition(ast_node, locals)
@@ -33,11 +36,11 @@ module RbWasmVdom
       VNode.new(ast_node.tag, new_props, new_children)
     end
 
-    # @rbs children: Array[VNode | String]
+    # @rbs children: Array[VNode | VFragment | String]
     # @rbs locals: Hash[Symbol, untyped]
-    # @rbs return: Array[VNode | String]
+    # @rbs return: Array[VNode | VFragment | String]
     def build_child_nodes(children, locals)
-      new_children = [] #: Array[VNode | String]
+      new_children = [] #: Array[VNode | VFragment | String]
       index = 0
 
       while index < children.length
@@ -48,10 +51,10 @@ module RbWasmVdom
       new_children
     end
 
-    # @rbs children: Array[VNode | String]
+    # @rbs children: Array[VNode | VFragment | String]
     # @rbs index: Integer
     # @rbs locals: Hash[Symbol, untyped]
-    # @rbs return: [Array[VNode | String], Integer]
+    # @rbs return: [Array[VNode | VFragment | String], Integer]
     def build_child_nodes_at(children, index, locals)
       child = children[index]
 
@@ -60,10 +63,10 @@ module RbWasmVdom
       [build_vdom_nodes(child, locals), index + 1]
     end
 
-    # @rbs children: Array[VNode | String]
+    # @rbs children: Array[VNode | VFragment | String]
     # @rbs index: Integer
     # @rbs locals: Hash[Symbol, untyped]
-    # @rbs return: [Array[VNode | String], Integer]
+    # @rbs return: [Array[VNode | VFragment | String], Integer]
     def build_conditional_child_nodes(children, index, locals)
       conditional_node, next_index = find_conditional_node(children, index, locals)
       return [[], next_index] unless conditional_node

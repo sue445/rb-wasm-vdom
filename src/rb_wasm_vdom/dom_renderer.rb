@@ -5,19 +5,15 @@ module RbWasmVdom
   module DomRenderer
     private
 
-    # @rbs vnode: VNode | String
+    # @rbs vnode: VNode | VFragment | String
     # @rbs return: untyped
     def create_element(vnode)
       document = JS.global[:document]
       return document.createTextNode(vnode) if vnode.is_a?(String)
 
-      el = document.createElement(vnode.tag)
-      update_props(el, {}, vnode.props)
+      return create_fragment_element(document, vnode) if vnode.is_a?(VFragment)
 
-      vnode.children.each do |child|
-        el.appendChild(create_element(child))
-      end
-      el
+      create_node_element(document, vnode)
     end
 
     # @rbs el: untyped
@@ -27,6 +23,34 @@ module RbWasmVdom
     def update_props(el, old_props, new_props)
       remove_old_props(el, old_props, new_props)
       apply_new_props(el, old_props, new_props)
+    end
+
+    # @rbs document: untyped
+    # @rbs fragment: VFragment
+    # @rbs return: untyped
+    def create_fragment_element(document, fragment)
+      element = document.createDocumentFragment
+      append_children(element, fragment.children)
+      element
+    end
+
+    # @rbs document: untyped
+    # @rbs vnode: VNode
+    # @rbs return: untyped
+    def create_node_element(document, vnode)
+      el = document.createElement(vnode.tag)
+      update_props(el, {}, vnode.props)
+      append_children(el, vnode.children)
+      el
+    end
+
+    # @rbs el: untyped
+    # @rbs children: Array[VNode | VFragment | String]
+    # @rbs return: void
+    def append_children(el, children)
+      children.each do |child|
+        el.appendChild(create_element(child))
+      end
     end
 
     # @rbs el: untyped

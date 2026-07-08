@@ -21,6 +21,20 @@ class BrowserIntegrationTest
         results[:failed] << "test_state_update_re_renders_dom: #{e.message}"
       end
 
+      begin
+        test_multiple_root_elements_render
+        results[:passed] += 1
+      rescue StandardError => e
+        results[:failed] << "test_multiple_root_elements_render: #{e.message}"
+      end
+
+      begin
+        test_multiple_root_elements_re_render
+        results[:passed] += 1
+      rescue StandardError => e
+        results[:failed] << "test_multiple_root_elements_re_render: #{e.message}"
+      end
+
       write_results(results)
     rescue StandardError => e
       write_results({
@@ -62,6 +76,69 @@ class BrowserIntegrationTest
 
     counter = JS.global[:document].getElementById("counter")
     raise "Expected '5', got '#{counter[:textContent]}'" unless counter[:textContent].to_s == "5"
+  end
+
+  def test_multiple_root_elements_render
+    setup_root_element
+
+    RbWasmVdom::App.new(
+      "#root",
+      template: <<~HTML,
+        <div id="first-root">First: {{ title }}</div>
+        <h1 id="second-root">Second: {{ title }}</h1>
+      HTML
+      state: { title: "Hello" },
+      methods: {}
+    )
+
+    document = JS.global[:document]
+    first_root = document.getElementById("first-root")
+    second_root = document.getElementById("second-root")
+    root = document.getElementById("root")
+
+    raise "First root element not found" unless first_root
+    raise "Second root element not found" unless second_root
+    raise "Expected 2 root children, got #{root[:children][:length]}" unless root[:children][:length].to_i == 2
+    unless first_root[:textContent].to_s == "First: Hello"
+      raise "Expected 'First: Hello', got '#{first_root[:textContent]}'"
+    end
+    return if second_root[:textContent].to_s == "Second: Hello"
+
+    raise "Expected 'Second: Hello', got '#{second_root[:textContent]}'"
+  end
+
+  def test_multiple_root_elements_re_render
+    setup_root_element
+
+    app = RbWasmVdom::App.new(
+      "#root",
+      template: <<~HTML,
+        <div id="first-root">First: {{ title }}</div>
+        <h1 id="second-root">Second: {{ title }}</h1>
+      HTML
+      state: { title: "Before" },
+      methods: {}
+    )
+
+    reactive_state = app.instance_variable_get(:@state)
+    reactive_state[:title] = "After"
+
+    document = JS.global[:document]
+    first_root = document.getElementById("first-root")
+    second_root = document.getElementById("second-root")
+    root = document.getElementById("root")
+
+    raise "First root element not found after re-render" unless first_root
+    raise "Second root element not found after re-render" unless second_root
+    unless root[:children][:length].to_i == 2
+      raise "Expected 2 root children after re-render, got #{root[:children][:length]}"
+    end
+    unless first_root[:textContent].to_s == "First: After"
+      raise "Expected 'First: After', got '#{first_root[:textContent]}'"
+    end
+    return if second_root[:textContent].to_s == "Second: After"
+
+    raise "Expected 'Second: After', got '#{second_root[:textContent]}'"
   end
 
   private
