@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
+
       matrix:
         test_task:
           - ruby-wasm-3.2
