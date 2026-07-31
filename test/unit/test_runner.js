@@ -72,63 +72,81 @@ async function runWithRubyWasm(version) {
 async function runWithPicoRuby() {
   const { default: createModule } = await import("@picoruby/wasm-wasi/picoruby.js");
   const wasmBinary = await fs.readFile("node_modules/@picoruby/wasm-wasi/dist/picoruby.wasm");
+  const originalFetch = globalThis.fetch;
+
+  globalThis.fetch = async (resource, options) => {
+    if (String(resource).endsWith("picoruby.wasm")) {
+      return new Response(wasmBinary, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/wasm"
+        }
+      });
+    }
+
+    return originalFetch(resource, options);
+  };
 
   let testResult = null;
 
-  const Module = await createModule({
-    wasmBinary,
-    noInitialRun: true,
-    print: (text) => {
-      console.log(text);
+  try {
+    const Module = await createModule({
+      wasmBinary,
+      noInitialRun: true,
+      print: (text) => {
+        console.log(text);
 
-      const match = text.match(/^__RB_WASM_VDOM_UNIT_TEST_RESULT__:(\d+):(\d+)$/);
-      if (match) {
-        testResult = {
-          passed: Number(match[1]),
-          failed: Number(match[2])
-        };
+        const match = text.match(/^__RB_WASM_VDOM_UNIT_TEST_RESULT__:(\d+):(\d+)$/);
+        if (match) {
+          testResult = {
+            passed: Number(match[1]),
+            failed: Number(match[2])
+          };
+        }
+      },
+      printErr: (text) => {
+        console.error(text);
       }
-    },
-    printErr: (text) => {
-      console.error(text);
+    });
+
+    Module.ccall("picorb_init", "number", [], []);
+
+    await mountRubyFiles(Module, "src");
+    await mountRubyFiles(Module, "test/unit");
+
+    const testFiles = await listRubyTestFiles("test/unit");
+
+    const runnerCode = `
+      begin
+        puts "PicoRuby runner started"
+        RB_WASM_VDOM_UNIT_TEST_FILES = ${JSON.stringify(testFiles.map(file => `/${file}`))}
+        eval(File.read("/test/unit/test_runner.rb"))
+      rescue Exception => e
+        puts "PicoRuby runner failed before test result:"
+        puts "#{e.class}: #{e.message}"
+        puts e.backtrace.join("\\n") if e.respond_to?(:backtrace) && e.backtrace
+        puts "__RB_WASM_VDOM_UNIT_TEST_RESULT__:0:1"
+      end
+    `;
+
+    const taskResult = Module.ccall(
+      "picorb_create_task",
+      "number",
+      ["string"],
+      [runnerCode]
+    );
+
+    if (taskResult !== 0) {
+      throw new Error(`picorb_create_task failed: ${taskResult}`);
     }
-  });
 
-  Module.ccall("picorb_init", "number", [], []);
+    const result = await runPicoRubyUntilResult(Module, () => testResult);
 
-  await mountRubyFiles(Module, "src");
-  await mountRubyFiles(Module, "test/unit");
-
-  const testFiles = await listRubyTestFiles("test/unit");
-
-  const runnerCode = `
-    begin
-      puts "PicoRuby runner started"
-      RB_WASM_VDOM_UNIT_TEST_FILES = ${JSON.stringify(testFiles.map(file => `/${file}`))}
-      eval(File.read("/test/unit/test_runner.rb"))
-    rescue Exception => e
-      puts "PicoRuby runner failed before test result:"
-      puts "#{e.class}: #{e.message}"
-      puts e.backtrace.join("\\n") if e.respond_to?(:backtrace) && e.backtrace
-      puts "__RB_WASM_VDOM_UNIT_TEST_RESULT__:0:1"
-    end
-  `;
-
-  const taskResult = Module.ccall(
-    "picorb_create_task",
-    "number",
-    ["string"],
-    [runnerCode]
-  );
-
-  if (taskResult !== 0) {
-    throw new Error(`picorb_create_task failed: ${taskResult}`);
-  }
-
-  const result = await runPicoRubyUntilResult(Module, () => testResult);
-
-  if (result.failed > 0) {
-    throw new Error(`PicoRuby unit tests failed: ${result.failed} failed.`);
+    if (result.failed > 0) {
+      throw new Error(`PicoRuby unit tests failed: ${result.failed} failed.`);
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
   }
 }
 
