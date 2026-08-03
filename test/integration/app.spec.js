@@ -35,34 +35,6 @@ for (const integration_test_file of integration_test_files) {
     // Open the clean HTML page via local dev server
     await page.goto(`/test/integration/fixture/${integration_test_file}`);
 
-    if (integration_test_file.includes("picoruby")) {
-      await assertBrowserTestResults(page);
-      return;
-    }
-
-    // Wait until the browser-ready script initializes and exposes the rubyVM promise
-    await page.waitForFunction(() => window.rubyVM !== undefined);
-
-    // Read the compiled production bundle directly from disk and inject it
-    const bundlePath = path.resolve("dist/rb-wasm-vdom.rb");
-    const productionCode = await fs.readFile(bundlePath, "utf8");
-
-    await page.evaluate(async (rubyCode) => {
-      const rubyModule = await window.rubyVM;
-      const vm = rubyModule.vm || rubyModule;
-      vm.eval(rubyCode);
-    }, productionCode);
-
-    // Read the separated browser test runner Ruby file and execute it
-    const runnerPath = path.resolve("test/integration/helper/browser_test_runner.rb");
-    const testSuiteCode = await fs.readFile(runnerPath, "utf8");
-
-    await page.evaluate(async (rubyCode) => {
-      const rubyModule = await window.rubyVM;
-      const vm = rubyModule.vm || rubyModule;
-      vm.eval(`${rubyCode}\nBrowserIntegrationTest.new.run_all_tests`);
-    }, testSuiteCode);
-
     await assertBrowserTestResults(page);
   });
 }

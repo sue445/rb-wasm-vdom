@@ -9,5 +9,11 @@
 <div id="root"></div>
 
 <div id="test-results" style="display: none;">Running...</div>
+
+<script type="text/ruby" src="/dist/rb-wasm-vdom.rb"></script>
+<script type="text/ruby" src="/test/integration/helper/browser_test_runner.rb"></script>
+<script type="text/ruby">
+  BrowserIntegrationTest.new.run_all_tests
+</script>
 </body>
 </html>
