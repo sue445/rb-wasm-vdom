@@ -4,9 +4,8 @@ module JsStubHelper
   # @rbs json: String
   # @rbs return: JS::Object
   def js_array(json)
-    # rubocop:disable Style/DocumentDynamicEvalDefinition
+    # rubocop:disable-next Style/DocumentDynamicEvalDefinition
     JS.eval("globalThis.__RbWasmVdomTestArray = #{json}")
-    # rubocop:enable Style/DocumentDynamicEvalDefinition
 
     JS.global["__RbWasmVdomTestArray"]
   end
