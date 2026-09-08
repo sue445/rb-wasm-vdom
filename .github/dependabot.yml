@@ -34,6 +34,8 @@ updates:
     cooldown:
       default-days: 7
   ###########################################################
+      exclude:
+        - rbpacker
 
   - package-ecosystem: "npm"
     directory: "/"
