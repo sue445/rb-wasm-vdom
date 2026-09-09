@@ -18,6 +18,11 @@ or using PicoRuby.wasm
 <script type="text/ruby" src="https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.rb"></script>
 
 <!--
+or minified version
+<script type="text/ruby" src="https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.min.rb"></script>
+-->
+
+<!--
 or specific version
 <script type="text/ruby" src="https://cdn.jsdelivr.net/npm/@sue445/rb-wasm-vdom@X.Y.Z/dist/rb-wasm-vdom.rb"></script>
 -->
