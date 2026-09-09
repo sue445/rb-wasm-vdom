@@ -19,7 +19,8 @@ module RequireRelativePatch
     @loaded[file_path] = true
     @path.push(File.dirname(file_path))
 
-    TOPLEVEL_BINDING.eval(File.read(file_path))
+    source = File.read(file_path)
+    TOPLEVEL_BINDING.eval(source, file_path, 1)
   ensure
     @path.pop if @path && @path.length > 1
   end
