@@ -7,22 +7,32 @@ UNIT_TEST_DIR = respond_to?(:require_relative) ? File.dirname(__FILE__) : "/test
 require "js"
 
 module RequireRelativePatch
+  class << self
+    def loaded
+      @loaded ||= {}
+    end
+
+    def path
+      @path ||= [UNIT_TEST_DIR]
+    end
+  end
+
   def require_relative(path)
-    @loaded ||= {}
-    @path ||= [UNIT_TEST_DIR]
+    pushed = false
 
     path = "#{path}.rb" unless path.end_with?(".rb")
-    file_path = File.expand_path(path, @path.last)
+    file_path = File.expand_path(path, RequireRelativePatch.path.last)
 
-    return if @loaded[file_path]
+    return if RequireRelativePatch.loaded[file_path]
 
-    @loaded[file_path] = true
-    @path.push(File.dirname(file_path))
+    RequireRelativePatch.loaded[file_path] = true
+    RequireRelativePatch.path.push(File.dirname(file_path))
+    pushed = true
 
     source = File.read(file_path)
     TOPLEVEL_BINDING.eval(source, file_path, 1)
   ensure
-    @path.pop if @path && @path.length > 1
+    RequireRelativePatch.path.pop if pushed
   end
 end
 
