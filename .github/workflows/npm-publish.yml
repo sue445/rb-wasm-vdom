@@ -196,4 +196,6 @@ jobs:
         run: sleep 60
 
       - name: Purge jsDelivr cache
-        run: curl -s https://purge.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.rb
+        run: |
+          curl -s https://purge.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.rb
+          curl -s https://purge.jsdelivr.net/npm/@sue445/rb-wasm-vdom@latest/dist/rb-wasm-vdom.min.rb
