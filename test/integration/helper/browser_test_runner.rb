@@ -56,7 +56,7 @@ class BrowserIntegrationTest
       "#root",
       template: '<div id="test-message">Count: {{ count }}</div>',
       state: { count: 10 },
-      methods: {}
+      methods: {},
     )
     rendered = JS.global[:document].getElementById("test-message")
     raise "Element not found" unless rendered
@@ -69,7 +69,7 @@ class BrowserIntegrationTest
       "#root",
       template: '<span id="counter">{{ count }}</span>',
       state: { count: 0 },
-      methods: {}
+      methods: {},
     )
     reactive_state = app.instance_variable_get(:@state)
     reactive_state[:count] = 5
@@ -88,7 +88,7 @@ class BrowserIntegrationTest
         <h1 id="second-root">Second: {{ title }}</h1>
       HTML
       state: { title: "Hello" },
-      methods: {}
+      methods: {},
     )
 
     document = JS.global[:document]
@@ -117,7 +117,7 @@ class BrowserIntegrationTest
         <h1 id="second-root">Second: {{ title }}</h1>
       HTML
       state: { title: "Before" },
-      methods: {}
+      methods: {},
     )
 
     reactive_state = app.instance_variable_get(:@state)

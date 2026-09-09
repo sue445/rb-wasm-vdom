@@ -15,7 +15,7 @@ class AppEachTest < SimpleTestCase
         RbWasmVdom::VNode.new("p", { "#if" => "count > 0" }, ["positive"]),
         RbWasmVdom::VNode.new("p", { "#elsif" => "count < 0" }, ["negative"]),
         RbWasmVdom::VNode.new("p", { "#else" => "" }, ["zero"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -35,7 +35,7 @@ class AppEachTest < SimpleTestCase
         RbWasmVdom::VNode.new("p", { "#if" => "count > 0" }, ["positive"]),
         RbWasmVdom::VNode.new("p", { "#elsif" => "count < 0" }, ["negative"]),
         RbWasmVdom::VNode.new("p", { "#else" => "" }, ["zero"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -55,7 +55,7 @@ class AppEachTest < SimpleTestCase
         RbWasmVdom::VNode.new("p", { "#if" => "count > 0" }, ["positive"]),
         RbWasmVdom::VNode.new("p", { "#elsif" => "count < 0" }, ["negative"]),
         RbWasmVdom::VNode.new("p", { "#else" => "" }, ["zero"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -73,7 +73,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("p", { "#if" => "visible" }, ["shown"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -89,7 +89,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("li", { "#if" => "visible", "#each" => "item in items" }, ["{{ item }}"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)

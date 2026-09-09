@@ -14,7 +14,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("li", { "#each" => "item in items" }, ["{{ item }}"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -43,7 +43,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("li", { "#each" => "item, index in items" }, ["{{ index }}: {{ item }}"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -62,7 +62,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("li", { "#each" => "name, score in scores" }, ["{{ name }}: {{ score }}"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -93,9 +93,9 @@ class AppEachTest < SimpleTestCase
             "class" => "item-{{ item }}",
             "data-name" => "{{ item }}"
           },
-          ["{{ item }}"]
+          ["{{ item }}"],
         )
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -123,9 +123,9 @@ class AppEachTest < SimpleTestCase
             "#each" => "item in items",
             "class" => "item"
           },
-          ["{{ item }}"]
+          ["{{ item }}"],
         )
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -143,7 +143,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("li", { "#each" => "item in items" }, ["{{ item }}"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -160,7 +160,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("li", { "#each" => "item in items" }, ["{{ item }}"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -189,7 +189,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("li", { "#each" => "item, index in items" }, ["{{ index }}: {{ item }}"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -205,7 +205,7 @@ class AppEachTest < SimpleTestCase
       users: [
         { name: "foo", languages: %w[Ruby Go] },
         { name: "bar", languages: %w[TypeScript] }
-      ]
+      ],
     )
 
     ast = RbWasmVdom::VNode.new(
@@ -222,11 +222,11 @@ class AppEachTest < SimpleTestCase
               {},
               [
                 RbWasmVdom::VNode.new("li", { "#each" => "language in user[:languages]" }, ["{{ language }}"])
-              ]
+              ],
             )
-          ]
+          ],
         )
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
@@ -256,7 +256,7 @@ class AppEachTest < SimpleTestCase
       {},
       [
         RbWasmVdom::VNode.new("li", { "#each" => "language in user[:languages]" }, ["{{ language }}"])
-      ]
+      ],
     )
 
     vnode = app.send(:build_vdom, ast)
