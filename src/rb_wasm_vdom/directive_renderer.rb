@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+require_relative "conditional_renderer"
+require_relative "vfragment"
+require_relative "vnode"
+require_relative "interpolator"
+
 module RbWasmVdom
   module DirectiveRenderer # rubocop:disable Metrics/ModuleLength
     include ConditionalRenderer

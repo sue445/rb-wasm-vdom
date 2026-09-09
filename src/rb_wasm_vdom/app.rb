@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+require_relative "patcher"
+require_relative "directive_renderer"
+require_relative "template_parser"
+require_relative "reactive_state"
+require_relative "interpolator"
+
 module RbWasmVdom
   # Framework Core
   class App

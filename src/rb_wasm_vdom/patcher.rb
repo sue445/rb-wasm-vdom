@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+require_relative "dom_renderer"
+require_relative "vnode"
+require_relative "vfragment"
+
 module RbWasmVdom
   module Patcher
     include DomRenderer

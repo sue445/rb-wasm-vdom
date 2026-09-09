@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+require_relative "vfragment"
+require_relative "vnode"
+
 module RbWasmVdom
   # HTML Template Parser
   class TemplateParser
