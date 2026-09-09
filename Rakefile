@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 require "rubocop/rake_task"
+require "rbpacker/cli"
+
+def root_dir
+  __dir__
+end
+
+Dir["#{__dir__}/tasks/*.rake"].each { |f| load f }
 
 RuboCop::RakeTask.new
 
