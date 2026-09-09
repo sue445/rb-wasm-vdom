@@ -35,7 +35,7 @@ class InterpolatorTest < SimpleTestCase
       {
         index: 1,
         item: "Wasm"
-      }
+      },
     )
 
     assert_equal "1: Wasm", result
@@ -47,7 +47,7 @@ class InterpolatorTest < SimpleTestCase
 
     result = interpolator.call(
       '{{ user[:name].gsub("R", "L") }}',
-      { user: { name: "Ruby" } }
+      { user: { name: "Ruby" } },
     )
 
     assert_equal "Luby", result
@@ -59,7 +59,7 @@ class InterpolatorTest < SimpleTestCase
 
     result = interpolator.call(
       '{{ user[:name].include?("R") }}',
-      { user: { name: "Ruby" } }
+      { user: { name: "Ruby" } },
     )
 
     assert_equal "true", result
@@ -71,7 +71,7 @@ class InterpolatorTest < SimpleTestCase
 
     result = interpolator.call(
       "{{ user[:name].slice(0, 2) }}",
-      { user: { name: "Ruby" } }
+      { user: { name: "Ruby" } },
     )
 
     assert_equal "Ru", result
@@ -83,7 +83,7 @@ class InterpolatorTest < SimpleTestCase
 
     result = interpolator.call(
       "{{ user[:name] }}",
-      { user: { name: "Ruby" } }
+      { user: { name: "Ruby" } },
     )
 
     assert_equal "Ruby", result
@@ -95,7 +95,7 @@ class InterpolatorTest < SimpleTestCase
 
     result = interpolator.call(
       "{{ user[:unknown] }}",
-      { user: { name: "Ruby" } }
+      { user: { name: "Ruby" } },
     )
 
     assert_equal "", result
@@ -122,7 +122,7 @@ class InterpolatorTest < SimpleTestCase
 
       result = interpolator.call(
         "Value: {{ name }}",
-        { name: "sue445" }
+        { name: "sue445" },
       )
 
       assert_equal "Value: sue445", result
