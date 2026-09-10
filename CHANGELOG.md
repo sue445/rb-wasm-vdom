@@ -1,5 +1,11 @@
 ## Unreleased
-[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.6.1...main)
+[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.7.0...main)
+
+## [v0.7.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.7.0)
+[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.6.1...v0.7.0)
+
+* Add minified js
+  * https://github.com/sue445/rb-wasm-vdom/pull/126
 
 ## [v0.6.1](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.6.1)
 [full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.6.0...v0.6.1)
