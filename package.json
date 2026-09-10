@@ -32,7 +32,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "vite build && node scripts/build-ruby.js",
+    "build": "vite build && bundle exec rake build",
     "test": "npm run test:unit && npm run test:integration && npm run test:build",
     "test:build": "node --test 'test/build/*.test.js'",
     "test:integration": "npm run build && playwright test test/integration/",

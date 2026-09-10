@@ -4,6 +4,7 @@ source "https://rubygems.org"
 
 group :development do
   gem "rake", require: false
+  gem "rbpacker", require: false
   gem "rbs", require: false
   gem "rbs-inline", require: false
   gem "rubocop", require: false

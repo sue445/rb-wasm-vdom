@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+require_relative "js_console"
+
 module RbWasmVdom
   class Interpolator
     IDENTIFIER_PATTERN = /^[a-z_]\w*$/

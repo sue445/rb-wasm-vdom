@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+require_relative "vnode"
+require_relative "interpolator"
+
 module RbWasmVdom
   module ConditionalRenderer
     CONDITIONAL_DIRECTIVES = ["#if", "#elsif", "#else"].freeze

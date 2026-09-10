@@ -4,6 +4,8 @@
 require "js"
 require "json"
 
+require_relative "rb_wasm_vdom/app"
+
 module RbWasmVdom
   # @rbs selector: String
   # @rbs template: String
