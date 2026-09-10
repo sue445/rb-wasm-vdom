@@ -1,13 +1,7 @@
 ## Unreleased
-[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.7.1...main)
+[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.6.2...main)
 
-## [v0.7.1](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.7.1)
-[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.7.0...v0.7.1)
-
-* Re-release due to an error during the npm release
-
-## [v0.7.0](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.7.0)
-[full changelog](http://github.com/sue445/rb-wasm-vdom/compare/v0.6.1...v0.7.0)
+## [v0.6.2](https://github.com/sue445/rb-wasm-vdom/releases/tag/v0.6.2)
 
 * Add minified js
   * https://github.com/sue445/rb-wasm-vdom/pull/126
