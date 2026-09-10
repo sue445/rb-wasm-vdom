@@ -42,17 +42,21 @@ ensure
   Warning.define_singleton_method(:warn, original_warn) if original_warn
 end
 
-namespace :build do
-  desc "Build dist/rb-wasm-vdom.rb"
-  task :rb_wasm_vdom do
-    build_rb_wasm_vdom(dst_filename: "rb-wasm-vdom.rb", minify: false)
-  end
+require "rake/clean"
 
-  desc "Build dist/rb-wasm-vdom.min.rb"
-  task :rb_wasm_vdom_min do
-    build_rb_wasm_vdom(dst_filename: "rb-wasm-vdom.min.rb", minify: true)
-  end
+CLOBBER.include("dist")
+
+SRC_FILES = FileList["src/**/*.rb"]
+
+directory "dist"
+
+file "dist/rb-wasm-vdom.rb" => ["dist", *SRC_FILES] do
+  build_rb_wasm_vdom(dst_filename: "rb-wasm-vdom.rb", minify: false)
+end
+
+file "dist/rb-wasm-vdom.min.rb" => ["dist", *SRC_FILES] do
+  build_rb_wasm_vdom(dst_filename: "rb-wasm-vdom.min.rb", minify: true)
 end
 
 desc "Build dist/*.rb"
-task build: %i[build:rb_wasm_vdom build:rb_wasm_vdom_min]
+task build: %w[dist/rb-wasm-vdom.rb dist/rb-wasm-vdom.min.rb]
