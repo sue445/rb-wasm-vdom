@@ -6,6 +6,10 @@ import test from "node:test";
 
 const rootDir = process.cwd();
 const outputFile = path.join(rootDir, "dist", "rb-wasm-vdom.es.js");
+const bundledOutputFiles = [
+  path.join(rootDir, "dist", "rb-wasm-vdom.es.js"),
+  path.join(rootDir, "dist", "rb-wasm-vdom.iife.js")
+];
 const sourceDir = path.join(rootDir, "src", "rb_wasm_vdom");
 const mainSourceFile = path.join(rootDir, "src", "rb_wasm_vdom.rb");
 
@@ -19,6 +23,15 @@ const sourceFiles = () => {
     ...files,
     mainSourceFile
   ];
+};
+
+const stripRubyBundlerOnlyLines = (code) => {
+  return code
+    .replace(/^\s*#\s*frozen_string_literal:\s*true\s*$/gm, "")
+    .replace(/^\s*#\s*rbs_inline:\s*enabled\s*$/gm, "")
+    .replace(/^\s*require_relative\s+["'][^"']+["']\s*$/gm, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 };
 
 const buildViteBundle = () => {
@@ -79,12 +92,37 @@ test("rb-wasm-vdom.es.js includes all src/rb_wasm_vdom/*.rb files", async () => 
   const frameworkRubyCode = evaluatedCode[0];
 
   for (const file of sourceFiles()) {
-    const sourceCode = fs.readFileSync(file, "utf-8");
+    const sourceCode = stripRubyBundlerOnlyLines(fs.readFileSync(file, "utf-8"));
 
     assert.match(
       frameworkRubyCode,
       new RegExp(sourceCode.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
       `${path.relative(rootDir, file)} should be included in rb-wasm-vdom.es.js`
+    );
+  }
+});
+
+test("rb-wasm-vdom.es.js and rb-wasm-vdom.iife.js do not include Ruby magic comments or require_relative", () => {
+  buildViteBundle();
+
+  for (const file of bundledOutputFiles) {
+    const code = fs.readFileSync(file, "utf-8");
+    const relativePath = path.relative(rootDir, file);
+
+    assert.doesNotMatch(
+      code,
+      /#\s*frozen_string_literal:\s*true/,
+      `${relativePath} should not include frozen_string_literal magic comments`
+    );
+    assert.doesNotMatch(
+      code,
+      /#\s*rbs_inline:\s*enabled/,
+      `${relativePath} should not include rbs_inline magic comments`
+    );
+    assert.doesNotMatch(
+      code,
+      /\brequire_relative\b/,
+      `${relativePath} should not include require_relative`
     );
   }
 });
