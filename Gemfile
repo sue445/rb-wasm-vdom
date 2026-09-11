@@ -9,5 +9,6 @@ group :development do
   gem "rbs-inline", require: false
   gem "rubocop", require: false
   gem "rubocop_auto_corrector", require: false
+  gem "rubocop-performance", require: false
   gem "steep", require: false
 end
