@@ -8,7 +8,7 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v7.1.0'
         - 're-actors/alls-green@v1.3.0'
-        - 'ruby/setup-ruby@v1.336.0'
+        - 'ruby/setup-ruby@v1.338.0'
     '.github/workflows/dependabot-manager.yml': []
     '.github/workflows/deploy-pages.yml':
         - 'act10ns/slack@v2.2.0'
@@ -22,7 +22,7 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'actions/create-github-app-token@v3.3.0'
         - 'actions/setup-node@v7.1.0'
-        - 'ruby/setup-ruby@v1.336.0'
+        - 'ruby/setup-ruby@v1.338.0'
         - 'step-security/harden-runner@v2.22.2'
     '.github/workflows/rbs-collection-updater.yml': []
     '.github/workflows/verify-actions-lockfile.yml': []
@@ -79,9 +79,9 @@ dependencies:
         commit: 'sha1-b5b5b37504aa4183270bd3d855c52a67f212be35'
         owner_id: 46427759
         repo_id: 434447646
-    'ruby/setup-ruby@v1.336.0':
-        ref: 'v1.336.0'
-        commit: 'sha1-de492cf36cbab201753d720ce4f4e336cd688c94'
+    'ruby/setup-ruby@v1.338.0':
+        ref: 'v1.338.0'
+        commit: 'sha1-b3aaceaef7e0ee231b499e7b5f49c03fc1d32199'
         owner_id: 210414
         repo_id: 231208785
     'step-security/harden-runner@v2.22.2':
